@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Garderob</title>
+   <script src="https://telegram.org/js/telegram-web-app.js"></script>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+   <link rel="stylesheet" href="{{ url_for('static',filename='index.css') }}">
+</head>
+<body>
+    <p id="bibasosina">Две большие кнопки внизу выбирают предмет. Нажимай на фото неко чтобы разместить их. Кнопки со стрелками изменяют размер и угол поворота, а последняя - видимость предмета</p>
+	<div class="k">
+		<p>Масштабᅠ </p>
+		<input id="polzunok" type="range" min="0.3" max="2" step="0.1" value="1"> 
+	</div>
+	<div id="dev">
+		<div id="testus">
+	    <div id="testo">
+			<img id="nekopic" src="{{ url_for('static',filename='notfound.png') }}" alt="loading...">
+			<img id="item1" src="{{ url_for('static',filename='0.png') }}" alt="loading...">
+			<img id="item2" src="{{ url_for('static',filename='0.png') }}" alt="loading...">
+		</div>
+		</div>
+    </div>
+	</br>
+	<div class="a">
+		<button class="b" type="button" id="plus"><img class="but_img" src="{{ url_for('static',filename='but1.png') }}" width="50" height="50" alt="loading..."></button>
+		<button class="b" type="button" id="minus"><img class="but_img" src="{{ url_for('static',filename='but2.png') }}" width="50" height="50"alt="loading..."></button>
+		<button class="b" type="button" id="rot_left"><img class="but_img" src="{{ url_for('static',filename='but4.png') }}" width="50" height="50"alt="loading..."></button>
+		<button class="b" type="button" id="rot_right"><img class="but_img" src="{{ url_for('static',filename='but3.png') }}" width="50" height="50" alt="loading..."></button>
+		<button class="b" type="button" id="show"><img class="but_img" src="{{ url_for('static',filename='but5.png') }}" id="show_img" width="50" height="50" alt="loading..."></button>
+	</div>
+	<div class="c">
+		<button class="d" type="button" id="select_one"><img class="but_img" id="but_img1" src="{{ url_for('static',filename='0.png') }}" width="100" height="100" alt="loading..."></button>
+		<button class="d" type="button" id="select_two"><img class="but_img" id="but_img2" src="{{ url_for('static',filename='0.png') }}" width="100" height="100"alt="loading..."></button>
+	</div>
+	<p></br></p>
+    
+</body>
+<script>
+	var but5 = "{{ url_for('static',filename='but5.png') }}";
+	var but6 = "{{ url_for('static',filename='but6.png') }}";
+</script>
+<script src="{{ url_for('static',filename='index.js') }}"></script>
+</html>
