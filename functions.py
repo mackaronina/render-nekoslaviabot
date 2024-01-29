@@ -672,6 +672,13 @@ def send_gulat_message(bot,event,nam,baza,chat,gender):
 		if gender == 1:
 			text = 'Вы забрели в парк, где возле лавочки стоял подозрительный торговый автомат. Если верить надписи, он выдаёт бесплатный косяк каждому владельцу некомальчика, достаточно просто приложить лицензию 🎫 к сканеру. Почему-то выглядит как наебалово'
 		ph = 'AgACAgIAAx0CZQN7rQABAX7_ZNQ2rFDlxRzvMyobhb1OEfuXC-QAAvnKMRsMUalKaRQHS_543gwBAAMCAANzAAMwBA'
+	elif event == 12:
+		switch_button1 = types.InlineKeyboardButton(text='Атаковать 👊', switch_inline_query_current_chat = "Атаковать")
+		switch_button2 = types.InlineKeyboardButton(text='Съебать 🏃‍♂️', switch_inline_query_current_chat = "Съебать")
+		markup.add(switch_button1)
+		markup.add(switch_button2)
+		text = 'Дикий картоноед унюхал картон в твоём инвентаре и готовится напасть на вас! Это крайне опасное существо, но с другой стороны вы вдвоём, а он один'
+		ph = 'AgACAgIAAx0CZQN7rQABA6Q8ZbHtpO4EAYVkwxKsSks842oN_KEAAoHYMRsu9JBJKQ_Qz0ZJGm0BAAMCAAN5AAM0BA'
 	bot.send_photo(chat,photo = ph,caption = text + ps,reply_markup=markup)
 	
 def pvp_text(nam1,nam2,maxhp1,maxhp2,hp1,hp2,blocks1,blocks2,skills1,skills2):

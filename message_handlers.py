@@ -351,6 +351,8 @@ def msg_text(message,bot):
 				bot.send_sticker(message.chat.id, 'CAACAgIAAxkBAAEFLW1iwHwF7vKClo5usceHHPCXG_sHxwACKxAAAnazWEhhnVRbfrQa8ikE')
 			else:
 				d = random.randint(1,7)
+				if inventory['carton'] > 0:
+					d = random.randint(1,8)
 				gulat = int(time.time() + GULAT_TIMEOUT + HAPPY_TIMEOUT[get_happiness_level(happy,baza)])
 				active_event = 0
 				if d == 1:
@@ -398,6 +400,8 @@ def msg_text(message,bot):
 					active_event = 8
 				elif d == 7:
 					active_event = 11
+				elif d == 8:
+					active_event = 12
 				send_gulat_message(bot,active_event,nam,baza,message.chat.id,gender)
 				cursor.execute(f'UPDATE neko SET event = {active_event}, gulat = {gulat} WHERE id = {message.from_user.id}')
 		elif cmd == 'повтор':
@@ -686,6 +690,12 @@ def msg_text(message,bot):
 				text = "Вы ушли, так и не узнав пытались ли вас наебать. На следующий день автомата уже не было на прежнем месте"
 			bot.send_message(message.chat.id,text)
 			cursor.execute(f'UPDATE neko SET event = 0 WHERE id = {message.from_user.id}')
+		elif cmd == 'съебать':
+			text = "Ебака отвлеклась на кучу картона когда вы пробегали мимо стройки, благодаря чему тебе с некодевочкой удалось оторваться"
+			if gender == 1:
+				text = "Ебака отвлеклась на кучу картона когда вы пробегали мимо стройки, благодаря чему тебе с некомальчиком удалось оторваться"
+			bot.send_message(message.chat.id,text)
+			cursor.execute(f'UPDATE neko SET event = 0 WHERE id = {message.from_user.id}')
 		elif cmd == 'купить':
 			if event == 4:
 				cost = 25
@@ -738,7 +748,6 @@ def msg_text(message,bot):
 				bot.send_message(message.chat.id,text)
 				inventory['gender_changer'] += 1
 			cursor.execute(f"UPDATE neko SET coins = {coins}, inventory = '{pack(inventory)}',event = 0 WHERE id = {message.from_user.id}")
-	  
 		elif cmd == 'открыть':
 			d = random.randint(1,2)
 			if d == 1:
@@ -755,6 +764,18 @@ def msg_text(message,bot):
 					text = 'Вам повезло, коробка оказалась полностью заполнена вискасом! Этого должно хватить на четыре раза, если не больше\n\n+ 4 Вискаса 🍫'
 				bot.send_photo(message.chat.id, photo = 'AgACAgIAAx0CZQN7rQACoKJiweU_aU7g1olT0b065v9A9dDVXwACqLsxGxyOEUodvpN4YkjBswEAAwIAA3MAAykE',caption = text)
 			cursor.execute(f"UPDATE neko SET inventory = '{pack(inventory)}', rep = {rep},event = 0 WHERE id = {message.from_user.id}")
+		elif cmd == 'атаковать':
+			d = random.randint(1,2)
+			if d == 1:
+				inventory['carton'] -= 1
+				text = f'Во время боя существу удалось зайти к тебе за спину и достать кусок картона из твоего рюкзака, после чего с ним в зубах оно убежало в неизвестном направлении\n\n– 1 Картон 📦'
+			elif d == 2:
+				inventory['adrenalin'] += 1
+				text = f'Пока {nam} пиздилась с картоноедом, тебе удалось незаметно подкрасться и достать недопитый энергетик с его кармана. Это можно считать победой?\n\n+ 1 Адреналин 🗡'
+				if gender == 1:
+					text = f'Пока {nam} пиздился с картоноедом, тебе удалось незаметно подкрасться и достать недопитый энергетик с его кармана. Это можно считать победой?\n\n+ 1 Адреналин 🗡'
+			bot.send_message(message.chat.id,text)
+			cursor.execute(f"UPDATE neko SET inventory = '{pack(inventory)}', event = 0 WHERE id = {message.from_user.id}")
 		elif cmd == 'вискас':
 				send_gulat_message(bot,4,nam,baza,message.chat.id,gender)
 				cursor.execute(f'UPDATE neko SET event = 4 WHERE id = {message.from_user.id}')

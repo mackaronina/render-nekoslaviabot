@@ -27,6 +27,8 @@ import html
 import traceback
 import requests
 
+time.sleep(2)
+
 class ExHandler(telebot.ExceptionHandler):
 	def handle(self, exc):
 		bot.send_message(ME_CHATID, traceback.format_exc())

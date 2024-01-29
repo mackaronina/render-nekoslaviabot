@@ -43,48 +43,21 @@ def msg_delete(message,bot):
 		schedule.every(DELETE_MINUTES).minutes.do(job_delete,bot,m.chat.id,m.id)
 
 def msg_report(message,bot):
-		print('aboba')
-		'''
-		cursor = bot.cursor
-		args = message.text.split()
-		if len(args) < 2:
-			bot.send_message(message.chat.id,'После /report нужно написать текст', reply_to_message_id=message.message_id)
+		if message.reply_to_message is None:
+			bot.send_message(message.chat.id, 'Ответом на сообщение даун', reply_to_message_id=message.message_id)
 			return
-
-		args.pop(0)
-		text = ' '.join(args)
-		bot.send_message(message.chat.id,'Отправлено', reply_to_message_id=message.message_id)
-		m = bot.send_message(SERVICE_CHATID, 'Пришел репорт: '+ text)
-		cursor.execute(f"INSERT INTO reports (message,chat,wait,source_message,source_chat) VALUES ({m.id},{m.chat.id},{int(time.time() + REPORT_TIMEOUT)},{message.id},{message.chat.id})")
-		'''
+		bot.forward_message(chat_id=SERVICE_CHATID, from_chat_id=message.chat.id, message_id=message.reply_to_message.message_id, protect_content=True)
+		bot.send_message(message.chat.id, 'Отправлено', reply_to_message_id=message.message_id)
 
 def msg_reply(message,bot):
-		print('aboba')
-		'''
-		cursor = bot.cursor
-		if message.reply_to_message is None:
-			bot.send_message(message.chat.id, 'Ответом на сообщение даун',reply_to_message_id=message.message_id)
-			return
 		args = message.text.split()
-		if len(args) < 2:
-			bot.send_message(message.chat.id,'После /reply нужно написать текст', reply_to_message_id=message.message_id)
-			return
 		args.pop(0)
 		text = ' '.join(args)
-		data = cursor.execute(f"SELECT source_message,source_chat FROM reports WHERE message = {message.reply_to_message.id} AND chat = {message.reply_to_message.chat.id}")
-		data = data.fetchone()
-		if data is None:
-			bot.send_message(message.chat.id,'Сообщение не найдено',reply_to_message_id=message.message_id)
-			return
-		source_message = data[0]
-		source_chat = data[1]
-		bot.send_message(source_chat,'Пришел ответ: ' + text,reply_to_message_id=source_message)
-		bot.send_message(message.chat.id,'Отправлено',reply_to_message_id=message.message_id)
-		cursor.execute(f"DELETE FROM reports WHERE message = {message.reply_to_message.id} AND chat = {message.reply_to_message.chat.id}")
-		'''
+		bot.send_message(message.forward_from_chat.id, f'Пришел ответ: {text}', reply_to_message_id=message.forward_from_message_id)
+		bot.send_message(message.chat.id, 'Отправлено', reply_to_message_id=message.message_id)
 		
 def msg_help(message,bot):
-		text = '<b>Некославия</b> - великая держава, а великая держава должна заботиться о своих гражданах, не так ли? Для этого запуvvщена специальная социальная программа - каждому полагается по некодевочке, без очередей и налогов. К счастью, благодаря новейшим разработкам у нас их достаточно. По закону каждый некослав обязан заботиться о своей некодевочке, а её смерть уголовно наказуема. Основой же нашего государственного строя является социальный рейтинг граждан, который напрямую зависит от доверия питомцев к ним\n\nЕсли тебе этого мало, вот ссылка на канал:\n<a href="https://www.youtube.com/channel/UCGGQGNMYzZqNJSCmmLsqEBg">Nekoslavia</a>\nЗадонатить на развитие бота:\n<i>5375 4141 3075 3857</i>'
+		text = '<b>Некославия</b> - великая держава, а великая держава должна заботиться о своих гражданах, не так ли? Для этого запущена специальная социальная программа - каждому полагается по некодевочке, без очередей и налогов. К счастью, благодаря новейшим разработкам у нас их достаточно. По закону каждый некослав обязан заботиться о своей некодевочке, а её смерть уголовно наказуема. Основой же нашего государственного строя является социальный рейтинг граждан, который напрямую зависит от доверия питомцев к ним\n\nЕсли тебе этого мало, вот ссылка на канал:\n<a href="https://www.youtube.com/channel/UCGGQGNMYzZqNJSCmmLsqEBg">Nekoslavia</a>\nЗадонатить на развитие бота:\n<i>5375 4141 3075 3857</i>'
 		text = 'Полезные ссылки:\n\n<a href="https://t.me/nekoslavia">Беседа с ботом</a>\n\n<a href="https://www.youtube.com/channel/UCGGQGNMYzZqNJSCmmLsqEBg">Наш канал на ютубе</a>\n\n<a href="https://send.monobank.ua/jar/86xhtgWqmw">Задонатить на развитие бота</a>'
 		bot.send_photo(message.chat.id, photo = 'AgACAgIAAx0CZQN7rQACsNJi4zRDEZJXRw3LDwsaG18kszXm_wACPbsxG6IdGEsJeCDpoaaZxAEAAwIAA3MAAykE',caption = text)
 
