@@ -608,9 +608,9 @@ def msg_text(message,bot):
 			markup = types.InlineKeyboardMarkup()
 			switch_button1 = types.InlineKeyboardButton(text='Улучшить ⏫', switch_inline_query_current_chat = "Улучшить")
 			switch_button2 = types.InlineKeyboardButton(text='Покрасить базу 🌈', switch_inline_query_current_chat = "Покрасить базу")
-			switch_button101 = types.InlineKeyboardButton(text='Выгнать дебилов 🙁', switch_inline_query_current_chat = "Выгнать дебилов")
-			switch_button102 = types.InlineKeyboardButton(text='Вернуть дебилов 🙂', switch_inline_query_current_chat = "Вернуть дебилов")
-			switch_button3 = types.InlineKeyboardButton(text='Верстак 🛠', switch_inline_query_current_chat = "Верстак")
+			switch_button3 = types.InlineKeyboardButton(text='Выгнать дебилов 🙁', switch_inline_query_current_chat = "Выгнать дебилов")
+			switch_button4 = types.InlineKeyboardButton(text='Вернуть дебилов 🙂', switch_inline_query_current_chat = "Вернуть дебилов")
+			switch_button5 = types.InlineKeyboardButton(text='Верстак 🛠', switch_inline_query_current_chat = "Верстак")
 			debil_base_photos = ['AgACAgIAAx0CZQN7rQABAR1-ZKXYxvflJZskUzvklW6Z45Qrxi4AAi7MMRsoDDFJFdKS2jFfgXcBAAMCAANzAAMvBA',
 			'AgACAgIAAx0CZQN7rQABAR2AZKXYzP_0FFnWmNCbXlxTbsFcg5kAAjDMMRsoDDFJs3ld-LV1u1QBAAMCAANzAAMvBA',
 			'AgACAgIAAx0CZQN7rQABAR2CZKXY0aLctjwpeiLDTx70wUEEfR8AAjHMMRsoDDFJdHtcBBa1tIEBAAMCAANzAAMvBA',
@@ -639,25 +639,36 @@ def msg_text(message,bot):
 			'\n\n<b>Покрасить базу</b>  —  100 💰\nТы можешь изменить цвет стен если он тебя заебал'
 			]
 			text = 'Вау, да это же твоя собственная база. В этом замечательном месте ты живёшь вместе' + gtxt + base_text[baza]
+			butlist = []
+
 			if baza < 7:
 				if not debil:
 					p = debil_base_photos[baza]
 				else:
 					p = neko_base_photos[baza]
-				markup.add(switch_button1)
+				butlist.append(switch_button1)
 			else:
 				if not debil:
 					p = photo_base
 				else:
 					p = photo_debil
-				markup.add(switch_button2)
+				butlist.append(switch_button2)
+
+			if baza > 1:
+				butlist.append(switch_button5)
+
 			if baza > 3:
 				if not debil:
-					markup.add(switch_button101)
+					butlist.append(switch_button3)
 				else:
-					markup.add(switch_button102)
-			if baza > 1:
-				markup.add(switch_button3)
+					butlist.append(switch_button4)
+
+			if len(butlist) != 3:
+				for b in butlist:
+					markup.add(b)
+			else:
+				markup.add(butlist[0], butlist[1])
+				markup.add(butlist[2])
 			bot.send_photo(message.chat.id,photo = p,caption = text,reply_markup=markup)
 		elif cmd == 'улучшить':
 			base_cost = [10,30, 50, 70, 90, 120, 150]
@@ -810,8 +821,7 @@ def msg_text(message,bot):
 				switch_button4 = types.InlineKeyboardButton(text='Данж 🏳️‍🌈', switch_inline_query_current_chat = "Данж")
 				switch_button3 = types.InlineKeyboardButton(text='Босс ☠️', switch_inline_query_current_chat = "Босс")
 				switch_button2 = types.InlineKeyboardButton(text='Покрасить машину 🌈', switch_inline_query_current_chat = "Покрасить машину")
-				markup.add(switch_button4)
-				markup.add(switch_button3)
+				markup.add(switch_button4,switch_button3)
 				markup.add(switch_button2)
 				text = f'Это твой собственный некомобиль, разве он не прекрасен? Что ж, выбирай куда ехать\n<b>Монстров ⚡️:</b>  {inventory["monster"]}\n\n<b>Данж 🏳️‍🌈</b>\nОт 60 доверия. Отправься к загадочному порталу в LGBT мир\n<b>Босс ☠️</b>\nОт 120 доверия. Отпизди неведомую хуйню сам или с друзьями\n\n<b>Покрасить машину</b>  —  100 💰\nТы можешь изменить цвет некомобиля если он тебя заебал'
 				bot.send_photo(message.chat.id,photo = photo_mobile,caption = text,reply_markup=markup)

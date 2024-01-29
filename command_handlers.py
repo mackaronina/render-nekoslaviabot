@@ -46,7 +46,7 @@ def msg_report(message,bot):
 		if message.reply_to_message is None:
 			bot.send_message(message.chat.id, 'Ответом на сообщение даун', reply_to_message_id=message.message_id)
 			return
-		bot.forward_message(chat_id=SERVICE_CHATID, from_chat_id=message.chat.id, message_id=message.reply_to_message.message_id, protect_content=True)
+		bot.forward_message(chat_id=SERVICE_CHATID, from_chat_id=message.chat.id, message_id=message.reply_to_message.message_id, protect_content=False)
 		bot.send_message(message.chat.id, 'Отправлено', reply_to_message_id=message.message_id)
 
 def msg_reply(message,bot):
