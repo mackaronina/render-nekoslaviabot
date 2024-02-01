@@ -76,7 +76,6 @@ bot.register_message_handler(msg_start,commands=["start"],pass_bot=True)
 bot.register_message_handler(msg_cmd,commands=["cmd"],pass_bot=True)
 bot.register_message_handler(msg_delete,commands=["delete"],pass_bot=True)
 bot.register_message_handler(msg_report,commands=["report"],pass_bot=True)
-bot.register_message_handler(msg_reply,commands=["reply"],pass_bot=True)
 bot.register_message_handler(msg_help,commands=["help"],pass_bot=True)
 bot.register_message_handler(msg_stat,commands=["stat"],pass_bot=True)
 
