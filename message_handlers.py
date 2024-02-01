@@ -42,8 +42,28 @@ def msg_text(message,bot):
 		data = cursor.execute(f"SELECT * FROM neko WHERE id = {message.from_user.id}")
 		data = data.fetchone()
 		if data is None:
-			bot.send_message(message.chat.id,'Ты не один из нас, напиши /start чтобы стать некославом ')
-			return
+			if cmd == 'неко':
+				p = random.choice(photos)
+				kormit = int(time.time())
+				gulat = int(time.time() + GULAT_TIMEOUT)
+				licension = int(time.time() + LICENSION_TIMEOUT)
+				happy = int(time.time())
+				cursor.execute(f"INSERT INTO neko (id,name,gulat,kormit,photo,licension,happy) VALUES ({message.from_user.id},'Некодевочка',{gulat},{kormit},'{p}',{licension}, {happy})")
+				bot.send_message(message.chat.id,'Добро пожаловать в Некославию! Каждому гражданину, согласно конституции, полагается некодевочка, держи свою\n\n/cmd - список комманд\n\n/help - полезные ссылки')
+				time.sleep(1)
+				text = 'Надо бы пояснить тебе наши порядки. <b>Некославия</b> - великая держава, а великая держава должна заботиться о благополучии своих гражданах, не так ли? Для этого запущена специальная социальная программа - каждому полагается по некодевочке, без очередей и налогов. К счастью, благодаря новейшим разработкам у нас их достаточно. По закону каждый некослав обязан заботиться о своей некодевочке, а её смерть уголовно наказуема'
+				bot.send_photo(message.chat.id, photo = 'AgACAgIAAx0CZQN7rQACsJRi4vTvzOG-zrdVRRS3iQhKUm-K_QAC37oxG6IdGEsIcBwLxnaZgwEAAwIAA3MAAykE',caption = text)
+				time.sleep(1)
+				text = 'А вот и твоя некодевочка. Вероятно, она проголодалась пока ждала тебя. Напиши "неко" чтобы убедиться в этом, а когда покормишь - не забудь дать ей имя'
+				bot.send_photo(message.chat.id, photo = p,caption = text)
+				time.sleep(1)
+				photo_design = 'AgACAgIAAx0CZQN7rQABAicRZSFoSY43lFLhRbyeeXPlv55ekY8AArbPMRvwnghJbqkwodtNPHcBAAMCAAN5AAMwBA' 
+				f = create_licension(bot,p,photo_design,message.from_user.first_name,0)
+				m = bot.send_photo(message.chat.id, photo=f,caption = 'И самое главное, держи лицензию 🎫 на свою некодевочку. Нужно будет продлить её через 4 дня, если не хочешь платить штраф, конечно')
+				cursor.execute(f"UPDATE neko SET photo_licension = '{m.photo[-1].file_id}' WHERE id = {message.from_user.id}")
+			else:
+				bot.send_message(message.chat.id,'Ты не один из нас, напиши /start чтобы стать некославом ')
+				return
 		nam = str(data[1]).rstrip()
 		rep = data[2]
 		gulat = int(data[3] - time.time())
@@ -98,7 +118,7 @@ def msg_text(message,bot):
 			cursor.execute(f'UPDATE neko SET chat = {ch} WHERE id = {message.from_user.id}')
 		if message.from_user.first_name != html.unescape(chel):
 			chel = html.escape(message.from_user.first_name, quote = True)
-			cursor.execute(f"UPDATE neko SET chel = ? WHERE id = {message.from_user.id}", chel)
+			cursor.execute(f"UPDATE neko SET chel = %s WHERE id = {message.from_user.id}", str(chel))
 		if bolnitsa > 0 and cmd not in cmd_allowed_bolnitsa:
 			b = math.ceil(bolnitsa/3600)
 			bot.send_message(message.chat.id, f'Ты в больнице дебил\n\n<i>Осталось лечиться {b} часов, используй антипохмелин чтобы выйти досрочно</i>')
@@ -124,7 +144,7 @@ def msg_text(message,bot):
 			markup = types.InlineKeyboardMarkup()
 			switch_button1 = types.InlineKeyboardButton(text='Покормить 🐟', switch_inline_query_current_chat = "Покормить")
 			switch_button2 = types.InlineKeyboardButton(text='Выгулять 🚶‍♀️', switch_inline_query_current_chat = "Выгулять")
-			switch_button3 = types.InlineKeyboardButton(text='Инвентарь 🎒', switch_inline_query_current_chat = "Вещи")
+			switch_button3 = types.InlineKeyboardButton(text='Погладить 🫳', switch_inline_query_current_chat = "Погладить")
 			markup.add(switch_button1,switch_button2)
 			markup.add(switch_button3) 
 			smiles = ['🥰','😊','😐','😠','🤬']
@@ -430,7 +450,7 @@ def msg_text(message,bot):
 				text = 'Ты дал имя некодевочке. Без сомнений, она быстро к нему привыкнет'
 				if gender == 1:
 					text = 'Ты дал имя некомальчику. Без сомнений, он быстро к нему привыкнет'
-				cursor.execute(f"UPDATE neko SET name = ? WHERE id = {message.from_user.id}", nam)
+				cursor.execute(f"UPDATE neko SET name = %s WHERE id = {message.from_user.id}", str(nam))
 				bot.send_message(message.chat.id, text)
 				bot.send_sticker(message.chat.id, 'CAACAgIAAxkBAAEFLaRiwIk4DRbw0Lap34MSyMpU-1-3KQACSQ8AAt46WUgVZwAB2AjTbT8pBA')
 		elif cmd == 'кладбище':
@@ -607,7 +627,7 @@ def msg_text(message,bot):
 				gtxt = ' со своим некомальчиком '
 			markup = types.InlineKeyboardMarkup()
 			switch_button1 = types.InlineKeyboardButton(text='Улучшить ⏫', switch_inline_query_current_chat = "Улучшить")
-			switch_button2 = types.InlineKeyboardButton(text='Покрасить базу 🌈', switch_inline_query_current_chat = "Покрасить базу")
+			switch_button2 = types.InlineKeyboardButton(text='Покрасить 🌈', switch_inline_query_current_chat = "Покрасить базу")
 			switch_button3 = types.InlineKeyboardButton(text='Выгнать дебилов 🙁', switch_inline_query_current_chat = "Выгнать дебилов")
 			switch_button4 = types.InlineKeyboardButton(text='Вернуть дебилов 🙂', switch_inline_query_current_chat = "Вернуть дебилов")
 			switch_button5 = types.InlineKeyboardButton(text='Верстак 🛠', switch_inline_query_current_chat = "Верстак")
@@ -820,7 +840,7 @@ def msg_text(message,bot):
 				markup = types.InlineKeyboardMarkup()
 				switch_button4 = types.InlineKeyboardButton(text='Данж 🏳️‍🌈', switch_inline_query_current_chat = "Данж")
 				switch_button3 = types.InlineKeyboardButton(text='Босс ☠️', switch_inline_query_current_chat = "Босс")
-				switch_button2 = types.InlineKeyboardButton(text='Покрасить машину 🌈', switch_inline_query_current_chat = "Покрасить машину")
+				switch_button2 = types.InlineKeyboardButton(text='Покрасить 🌈', switch_inline_query_current_chat = "Покрасить машину")
 				markup.add(switch_button4,switch_button3)
 				markup.add(switch_button2)
 				text = f'Это твой собственный некомобиль, разве он не прекрасен? Что ж, выбирай куда ехать\n<b>Монстров ⚡️:</b>  {inventory["monster"]}\n\n<b>Данж 🏳️‍🌈</b>\nОт 60 доверия. Отправься к загадочному порталу в LGBT мир\n<b>Босс ☠️</b>\nОт 120 доверия. Отпизди неведомую хуйню сам или с друзьями\n\n<b>Покрасить машину</b>  —  100 💰\nТы можешь изменить цвет некомобиля если он тебя заебал'
@@ -925,10 +945,9 @@ def msg_text(message,bot):
 						sktxt2 = passive_skill_list[skill2]
 
 					keyboard = types.InlineKeyboardMarkup(row_width=3)
-					callback_button1 = types.InlineKeyboardButton(text = 'Заменить навык 1️⃣',callback_data = 'skill ' + str(message.from_user.id) + ' 1 ' + str(skill))
-					callback_button2 = types.InlineKeyboardButton(text = 'Заменить навык 2️⃣',callback_data = 'skill ' + str(message.from_user.id) + ' 2 ' + str(skill))
-					keyboard.add(callback_button1)
-					keyboard.add(callback_button2)
+					callback_button1 = types.InlineKeyboardButton(text = 'Замена 1️⃣',callback_data = 'skill ' + str(message.from_user.id) + ' 1 ' + str(skill))
+					callback_button2 = types.InlineKeyboardButton(text = 'Замена 2️⃣',callback_data = 'skill ' + str(message.from_user.id) + ' 2 ' + str(skill))
+					keyboard.add(callback_button1,callback_button2)
 					callback_button3 = types.InlineKeyboardButton(text = 'Не менять 🆗',callback_data = 'dont ' + str(message.from_user.id))
 					keyboard.add(callback_button3)
 					text = nam + ', выпив содержимое банки, почуствовала в себе силу, способную свернуть горы. У неё появилось новое умение, выбери какой навык заменить на случайный:\n\n' + sktxt1 + '\n' + sktxt2
@@ -1030,11 +1049,10 @@ def msg_text(message,bot):
 					while item == item_one or item == item_two:
 						item = random.randint(1,22)
 					keyboard = types.InlineKeyboardMarkup(row_width=3)
-					callback_button1 = types.InlineKeyboardButton(text = 'Заменить украшение 1️⃣',callback_data = 'item ' + str(message.from_user.id) + ' 1 ' + str(item))
-					callback_button2 = types.InlineKeyboardButton(text = 'Заменить украшение 2️⃣',callback_data = 'item ' + str(message.from_user.id) + ' 2 ' + str(item))
+					callback_button1 = types.InlineKeyboardButton(text = 'Замена 1️⃣',callback_data = 'item ' + str(message.from_user.id) + ' 1 ' + str(item))
+					callback_button2 = types.InlineKeyboardButton(text = 'Замена 2️⃣',callback_data = 'item ' + str(message.from_user.id) + ' 2 ' + str(item))
 					callback_button3 = types.InlineKeyboardButton(text = 'Не менять 🆗',callback_data = 'dont ' + str(message.from_user.id))
-					keyboard.add(callback_button1)
-					keyboard.add(callback_button2)
+					keyboard.add(callback_button1,callback_button2)
 					keyboard.add(callback_button3)
 					item_phot = item_list[item][1]
 					txt = 'Внутри коробки вы нашли странную вещь. ' + nam + ', однако, сочла её красивой и захотела надеть. Выбери какой предмет гардероба заменить:\n\n' + item_list[item_one][0] + '\n\n' + item_list[item_two][0]

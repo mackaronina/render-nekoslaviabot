@@ -1615,6 +1615,25 @@ def callback_process(call,bot):
 	elif cmd == "spravka":
 		txt = today_text
 		answer_callback_query(bot,call,txt,True)
+	elif cmd == "wikicmd":
+		state = int(args[2])
+		answer_callback_query(bot,call,'Успешно')
+		keyboard = types.InlineKeyboardMarkup(row_width=2)
+		if state == 0:
+			callback_button1 = types.InlineKeyboardButton(text = '⬅️',callback_data = f'wikicmd {message.from_user.id} 2')
+			callback_button2 = types.InlineKeyboardButton(text = '➡️',callback_data = f'wikicmd {message.from_user.id} 1')
+			text = help_text[0]
+		elif state == 1:
+			callback_button1 = types.InlineKeyboardButton(text = '⬅️',callback_data = f'wikicmd {message.from_user.id} 0')
+			callback_button2 = types.InlineKeyboardButton(text = '➡️',callback_data = f'wikicmd {message.from_user.id} 2')
+			text = help_text[1]
+		elif state == 2:
+			callback_button1 = types.InlineKeyboardButton(text = '⬅️',callback_data = f'wikicmd {message.from_user.id} 1')
+			callback_button2 = types.InlineKeyboardButton(text = '➡️',callback_data = f'wikicmd {message.from_user.id} 0')
+			text = help_text[2]
+		keyboard.add(callback_button1,callback_button2)
+		time.sleep(1)
+		bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=text, reply_markup=keyboard)
 	elif cmd == "wikicraft":
 		state = int(args[2])
 		gender = int(args[3])
@@ -1637,7 +1656,6 @@ def callback_process(call,bot):
 			if gender == 1:
 				text = 'Используя это инновационное устройство на своей базе, ты можешь создавать стильную одежду для своего некомальчика, которая повысит его живучесть в бою'
 			text += '\n\n👖 Штаны за 40 гривень\nРецепт:  💰 Некогривны × 40\nХарактеристики:  +1 макс хп 💗\n\n👗 Костюм горничной\nРецепт:  📦 Картон × 5\nХарактеристики:  +2 макс хп 💗\n\n🦺 Куртка санса\nРецепт:  📦 Картон × 10 | 🦴 Кость санса × 5\nХарактеристики:  +4 макс хп 💗\n\n<code>Создать [назв]</code><i> - скрафтить указанный предмет</i>'
-
 		keyboard.add(callback_button1,callback_button2)
 		time.sleep(1)
 		phot = call.message.photo[-1].file_id
