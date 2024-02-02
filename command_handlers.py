@@ -30,7 +30,7 @@ def msg_cmd(message,bot):
 		callback_button1 = types.InlineKeyboardButton(text = '⬅️',callback_data = f'wikicmd {message.from_user.id} 2')
 		callback_button2 = types.InlineKeyboardButton(text = '➡️',callback_data = f'wikicmd {message.from_user.id} 1')
 		keyboard.add(callback_button1,callback_button2)
-		bot.send_message(message.chat.id,text,reply_to_message_id=message.message_id)
+		bot.send_message(message.chat.id,text,reply_to_message_id=message.message_id,reply_markup=keyboard)
 
 def msg_delete(message,bot):
 		cursor = bot.cursor

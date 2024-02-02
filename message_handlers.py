@@ -61,6 +61,7 @@ def msg_text(message,bot):
 				f = create_licension(bot,p,photo_design,message.from_user.first_name,0)
 				m = bot.send_photo(message.chat.id, photo=f,caption = 'И самое главное, держи лицензию 🎫 на свою некодевочку. Нужно будет продлить её через 4 дня, если не хочешь платить штраф, конечно')
 				cursor.execute(f"UPDATE neko SET photo_licension = '{m.photo[-1].file_id}' WHERE id = {message.from_user.id}")
+				return
 			else:
 				bot.send_message(message.chat.id,'Ты не один из нас, напиши /start чтобы стать некославом ')
 				return
@@ -144,7 +145,7 @@ def msg_text(message,bot):
 			markup = types.InlineKeyboardMarkup()
 			switch_button1 = types.InlineKeyboardButton(text='Покормить 🐟', switch_inline_query_current_chat = "Покормить")
 			switch_button2 = types.InlineKeyboardButton(text='Выгулять 🚶‍♀️', switch_inline_query_current_chat = "Выгулять")
-			switch_button3 = types.InlineKeyboardButton(text='Погладить 🫳', switch_inline_query_current_chat = "Погладить")
+			switch_button3 = types.InlineKeyboardButton(text='Погладить 🖐', switch_inline_query_current_chat = "Погладить")
 			markup.add(switch_button1,switch_button2)
 			markup.add(switch_button3) 
 			smiles = ['🥰','😊','😐','😠','🤬']
