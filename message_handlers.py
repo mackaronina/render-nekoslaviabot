@@ -142,6 +142,7 @@ def msg_text(message,bot):
 			return
 
 		if cmd == 'неко':
+			bot.send_message(message.chat.id, str(phot))
 			markup = types.InlineKeyboardMarkup()
 			switch_button1 = types.InlineKeyboardButton(text='Покормить 🐟', switch_inline_query_current_chat = "Покормить")
 			switch_button2 = types.InlineKeyboardButton(text='Выгулять 🚶‍♀️', switch_inline_query_current_chat = "Выгулять")
@@ -200,7 +201,7 @@ def msg_text(message,bot):
 				text += 'Владеет одним навыком 💪\n'
 			elif s == 0:
 				text += 'Владеет двумя навыками 💪\n'  
-			bot.send_photo(message.chat.id,photo=phot,caption = text,reply_markup=markup)
+			bot.send_photo(message.chat.id,photo=phot,caption=text)
 		elif cmd == 'вещи':
 			text = 'Это твой инвентарь. Надеюсь, ты сможешь найти всему этому применение\n'
 			text += f'\n💰 Некогривны × {coins}'
