@@ -43,7 +43,7 @@ def route_get_data(user_id):
 	data = data.fetchone()     
 	if data is None: 
 		return jsonify({"success": False})
-	phot = str(data[0]).rstrip()
+	phot = data[0]
 	item1 = data[1]
 	item2 = data[2]
 	if item1 == 0 and item2 == 0:
@@ -76,7 +76,7 @@ def route_set_data():
 			return '!', 200
 		item1 = data[0]
 		item2 = data[1]
-		phot = str(data[2]).rstrip()
+		phot = data[2]
 		chat = data[3]
 		im0 = get_pil(bot,phot)
 		with Image.open("bot/items/"+str(item1)+".png") as im1, Image.open("bot/items/"+str(item2)+".png") as im2:

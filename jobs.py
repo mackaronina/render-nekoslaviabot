@@ -30,10 +30,10 @@ def jobupd(bot):
 		data = cursor.execute(f'SELECT name,id,chat,chel,notifed,kormit FROM neko WHERE kormit < {tim - 4*24*3600}')
 		data = data.fetchall()
 		for dat in data:
-			nam = str(dat[0]).rstrip()
+			nam = dat[0]
 			idk = dat[1]
 			ch = dat[2]
-			chel = str(dat[3]).rstrip()
+			chel = dat[3]
 			notifed = dat[4]
 			kormit = int(dat[5] - tim)
 			if kormit < -4*24*3600 and not notifed:

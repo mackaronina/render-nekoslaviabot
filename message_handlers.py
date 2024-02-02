@@ -65,11 +65,11 @@ def msg_text(message,bot):
 			else:
 				bot.send_message(message.chat.id,'Ты не один из нас, напиши /start чтобы стать некославом ')
 				return
-		nam = str(data[1]).rstrip()
+		nam = data[1]
 		rep = data[2]
 		gulat = int(data[3] - time.time())
 		kormit = int(data[4] - time.time())
-		phot = str(data[5]).rstrip()
+		phot = data[5]
 		bolnitsa = int(data[6] - time.time())
 		zavod = data[7]
 		baza = data[8]
@@ -79,25 +79,25 @@ def msg_text(message,bot):
 		ch = data[12]
 		gladit = data[13]
 		wins = data[14]
-		chel = str(data[15]).rstrip()
+		chel = data[15]
 		arena_kd = int(data[16] - time.time())
-		photo_base = str(data[17]).rstrip()  
-		photo_mobile = str(data[18]).rstrip()
+		photo_base = data[17] 
+		photo_mobile = data[18]
 		dungeon_kd = int(data[19] - time.time())
 		debil = data[20]
-		photo_debil = str(data[21]).rstrip()
+		photo_debil = data[21]
 		automate = data[22]
 		licension = int(data[23] - time.time())
-		photo_licension = (data[24]).rstrip()
-		photo_design = (data[25]).rstrip()
+		photo_licension = data[24]
+		photo_design = data[25]
 		version = data[26]
 		skill1 = data[27]
 		skill2 = data[28]
-		gifka = str(data[29]).rstrip()
+		gifka = data[29]
 		gender = data[30]
 		item_one = data[31]
 		item_two = data[32]
-		new_phot = str(data[33]).rstrip()
+		new_phot = data[33]
 		if new_phot is not None:
 			phot = new_phot
 		notifed = data[34]
@@ -142,7 +142,6 @@ def msg_text(message,bot):
 			return
 
 		if cmd == 'неко':
-			bot.send_message(message.chat.id, str(phot))
 			markup = types.InlineKeyboardMarkup()
 			switch_button1 = types.InlineKeyboardButton(text='Покормить 🐟', switch_inline_query_current_chat = "Покормить")
 			switch_button2 = types.InlineKeyboardButton(text='Выгулять 🚶‍♀️', switch_inline_query_current_chat = "Выгулять")
@@ -201,7 +200,7 @@ def msg_text(message,bot):
 				text += 'Владеет одним навыком 💪\n'
 			elif s == 0:
 				text += 'Владеет двумя навыками 💪\n'  
-			bot.send_photo(message.chat.id,photo=phot,caption=text)
+			bot.send_photo(message.chat.id,photo=phot,caption=text,reply_markup=markup)
 		elif cmd == 'вещи':
 			text = 'Это твой инвентарь. Надеюсь, ты сможешь найти всему этому применение\n'
 			text += f'\n💰 Некогривны × {coins}'
@@ -266,7 +265,7 @@ def msg_text(message,bot):
 			i = 0
 			if data is not None:
 				for d in data:
-					n = d[0].rstrip()
+					n = d[0]
 					if n == 'Некодевочка' or n == 'Некомальчик':
 						n = 'Безымянная шмара'
 					if i == 0:
@@ -282,7 +281,7 @@ def msg_text(message,bot):
 			i = 0
 			if data is not None:
 				for d in data:
-					n = d[0].rstrip()
+					n = d[0]
 					if n == 'Некодевочка' or n == 'Некомальчик':
 						n = 'Безымянная шмара'
 					if i == 0:
@@ -887,7 +886,7 @@ def msg_text(message,bot):
 							bot.send_message(message.chat.id,'У этого лоха нет некодевочки')
 							return
 						b2 = int(data[0] - time.time())
-						chel = str(data[1]).rstrip()
+						chel = data[1]
 						if b2 <= 0:
 							bot.send_message(message.chat.id,'Этот лох не в больнице')
 							return
@@ -1333,7 +1332,7 @@ def msg_text(message,bot):
 			i = 0
 			if data is not None:
 				for d in data:
-					n = d[0].rstrip()
+					n = d[0]
 					if n == 'Некодевочка' or n == 'Некомальчик':
 						n = 'Безымянная шмара'			
 					if i == 0:
@@ -1673,7 +1672,7 @@ def msg_photo(message,bot):
 			data = data.fetchone()
 			if data is None:
 				return      
-			phot = str(data[5]).rstrip()
+			phot = data[5]
 			bolnitsa = int(data[6] - time.time())
 			base = data[8]
 			car = data[9]
@@ -1681,7 +1680,7 @@ def msg_photo(message,bot):
 			coins = data[11]
 			licension = data[23]
 			gender = data[30]
-			new_phot = str(data[33]).rstrip()
+			new_phot = data[33]
 			base_buy = data[40]
 			mobile_buy = data[41]
 			licension_buy = data[42]

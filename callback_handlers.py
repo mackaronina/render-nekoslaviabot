@@ -117,9 +117,9 @@ def callback_process(call,bot):
 		struct = unpack(db[key])
 		data = cursor.execute(f'SELECT * FROM neko WHERE id = {one}')
 		data = data.fetchone()
-		nam1 = str(data[1]).rstrip()
-		phot1 = str(data[5]).rstrip()
-		new_phot = str(data[33]).rstrip()
+		nam1 = data[1]
+		phot1 = data[5]
+		new_phot = data[33]
 		if new_phot is not None:
 			phot1 = new_phot
 		skill1 = data[27]
@@ -133,11 +133,11 @@ def callback_process(call,bot):
 		data = cursor.execute(f'SELECT * FROM neko WHERE id = ' + str(call.from_user.id))
 		data = data.fetchone()
 		rep2 = data[2]
-		nam2 = str(data[1]).rstrip()
+		nam2 = data[1]
 		arena_kd2 = int(data[16] - time.time())
 		c2 = data[11]
-		phot2 = str(data[5]).rstrip()
-		new_phot = str(data[33]).rstrip()
+		phot2 = data[5]
+		new_phot = data[33]
 		if new_phot is not None:
 			phot2 = new_phot
 		skill1 = data[27]
@@ -870,7 +870,7 @@ def callback_process(call,bot):
 		data = cursor.execute(f'SELECT name,base,gender FROM neko WHERE id = '+str(idk))
 		data = data.fetchone()
 		answer_callback_query(bot,call,'Успешно')
-		nam = str(data[0]).rstrip()
+		nam = data[0]
 		baza = data[1]
 		gender = data[2]
 		if gender == 0:
