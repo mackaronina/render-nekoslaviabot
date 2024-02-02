@@ -26,7 +26,7 @@ import requests
 def msg_text(message,bot):
 		cursor = bot.cursor
 		db = bot.db
-		patch_vesrion = bot.gazeta['patch_version']
+		patch_version = bot.gazeta['patch_version']
 		papers_images = bot.zavod['papers_images']
 		
 		message.text = message.text.replace('@NekoslaviaBot','').strip()

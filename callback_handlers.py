@@ -1620,16 +1620,16 @@ def callback_process(call,bot):
 		answer_callback_query(bot,call,'Успешно')
 		keyboard = types.InlineKeyboardMarkup(row_width=2)
 		if state == 0:
-			callback_button1 = types.InlineKeyboardButton(text = '⬅️',callback_data = f'wikicmd {message.from_user.id} 2')
-			callback_button2 = types.InlineKeyboardButton(text = '➡️',callback_data = f'wikicmd {message.from_user.id} 1')
+			callback_button1 = types.InlineKeyboardButton(text = '⬅️',callback_data = f'wikicmd {call.from_user.id} 2')
+			callback_button2 = types.InlineKeyboardButton(text = '➡️',callback_data = f'wikicmd {call.from_user.id} 1')
 			text = help_text[0]
 		elif state == 1:
-			callback_button1 = types.InlineKeyboardButton(text = '⬅️',callback_data = f'wikicmd {message.from_user.id} 0')
-			callback_button2 = types.InlineKeyboardButton(text = '➡️',callback_data = f'wikicmd {message.from_user.id} 2')
+			callback_button1 = types.InlineKeyboardButton(text = '⬅️',callback_data = f'wikicmd {call.from_user.id} 0')
+			callback_button2 = types.InlineKeyboardButton(text = '➡️',callback_data = f'wikicmd {call.from_user.id} 2')
 			text = help_text[1]
 		elif state == 2:
-			callback_button1 = types.InlineKeyboardButton(text = '⬅️',callback_data = f'wikicmd {message.from_user.id} 1')
-			callback_button2 = types.InlineKeyboardButton(text = '➡️',callback_data = f'wikicmd {message.from_user.id} 0')
+			callback_button1 = types.InlineKeyboardButton(text = '⬅️',callback_data = f'wikicmd {call.from_user.id} 1')
+			callback_button2 = types.InlineKeyboardButton(text = '➡️',callback_data = f'wikicmd {call.from_user.id} 0')
 			text = help_text[2]
 		keyboard.add(callback_button1,callback_button2)
 		time.sleep(1)
