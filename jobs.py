@@ -17,7 +17,7 @@ from petpetgif.saveGif import save_transparent_gif
 from pkg_resources import resource_stream
 from sqlalchemy import create_engine
 import json
-from io import BytesIO
+from io import StringIO, BytesIO
 import html
 import traceback
 import requests

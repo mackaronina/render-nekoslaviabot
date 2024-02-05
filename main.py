@@ -22,7 +22,7 @@ from petpetgif.saveGif import save_transparent_gif
 from pkg_resources import resource_stream
 from sqlalchemy import create_engine
 import json
-from io import BytesIO
+from io import StringIO, BytesIO
 import html
 import traceback
 import requests
@@ -31,7 +31,10 @@ time.sleep(2)
 
 class ExHandler(telebot.ExceptionHandler):
 	def handle(self, exc):
-		bot.send_message(ME_CHATID, traceback.format_exc())
+		sio = StringIO(traceback.format_exc())
+		sio.name = 'log.txt'
+		sio.seek(0)
+		bot.send_document(ME_CHATID, sio)
 		return True
 bot = telebot.TeleBot(TOKEN, threaded=True, num_threads=10, parse_mode='HTML', exception_handler = ExHandler())
 

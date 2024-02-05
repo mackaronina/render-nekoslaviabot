@@ -18,7 +18,7 @@ from petpetgif.saveGif import save_transparent_gif
 from pkg_resources import resource_stream
 from sqlalchemy import create_engine
 import json
-from io import BytesIO
+from io import StringIO, BytesIO
 import html
 import traceback
 import requests
@@ -46,21 +46,27 @@ def msg_text(message,bot):
 				p = random.choice(photos)
 				kormit = int(time.time())
 				gulat = int(time.time() + GULAT_TIMEOUT)
-				licension = int(time.time() + LICENSION_TIMEOUT)
+				licension = 0
 				happy = int(time.time())
-				cursor.execute(f"INSERT INTO neko (id,name,gulat,kormit,photo,licension,happy) VALUES ({message.from_user.id},'Некодевочка',{gulat},{kormit},'{p}',{licension}, {happy})")
-				bot.send_message(message.chat.id,'Добро пожаловать в Некославию! Каждому гражданину, согласно конституции, полагается некодевочка, держи свою\n\n/cmd - список комманд\n\n/help - полезные ссылки')
-				time.sleep(1)
-				text = 'Надо бы пояснить тебе наши порядки. <b>Некославия</b> - великая держава, а великая держава должна заботиться о благополучии своих гражданах, не так ли? Для этого запущена специальная социальная программа - каждому полагается по некодевочке, без очередей и налогов. К счастью, благодаря новейшим разработкам у нас их достаточно. По закону каждый некослав обязан заботиться о своей некодевочке, а её смерть уголовно наказуема'
+				cursor.execute(f"INSERT INTO neko (id,name,gulat,kormit,photo,licension,happy,photo_licension) VALUES ({message.from_user.id},'Некодевочка',{gulat},{kormit},'{p}',{licension}, {happy}, NULL)")
+				
+				text = "<b>Некославия</b> - социалистическое государство, которое достигло небывалого развития благодаря мудрому правлению <b>некокинга</b>. Особого прогреса удалось достичь в генной инженерии, был выведен гибрид кошки и человека - некодевочка. Это позволило запустить специальную социальную программу, каждому гражданину полагается своя кошкожена, без очередей и налогов"
 				bot.send_photo(message.chat.id, photo = 'AgACAgIAAx0CZQN7rQACsJRi4vTvzOG-zrdVRRS3iQhKUm-K_QAC37oxG6IdGEsIcBwLxnaZgwEAAwIAA3MAAykE',caption = text)
 				time.sleep(1)
-				text = 'А вот и твоя некодевочка. Вероятно, она проголодалась пока ждала тебя. Напиши "неко" чтобы убедиться в этом, а когда покормишь - не забудь дать ей имя'
-				bot.send_photo(message.chat.id, photo = p,caption = text)
-				time.sleep(1)
-				photo_design = 'AgACAgIAAx0CZQN7rQABAicRZSFoSY43lFLhRbyeeXPlv55ekY8AArbPMRvwnghJbqkwodtNPHcBAAMCAAN5AAMwBA' 
-				f = create_licension(bot,p,photo_design,message.from_user.first_name,0)
-				m = bot.send_photo(message.chat.id, photo=f,caption = 'И самое главное, держи лицензию 🎫 на свою некодевочку. Нужно будет продлить её через 4 дня, если не хочешь платить штраф, конечно')
-				cursor.execute(f"UPDATE neko SET photo_licension = '{m.photo[-1].file_id}' WHERE id = {message.from_user.id}")
+				text = "Твоя заявка на гражданство Некославии была одобрена и, как гражданину, мы выдаём тебе личную кошкожену. Напиши <i><u>неко</u></i> чтобы взглянуть на неё. Помни, что ключ к хорошим отношениям с твоей некодевочкой это <b>доверие 💞</b>. Его можно повысить многими способами, для начала попробуй дать некодевочке поесть командой <i><u>покормить</u></i>, скорее всего она проголодалась пока ехала к тебе. После этого советую придумать ей какую-нибудь пиздатую кличку командой <i><u>имя [текст]</i></u>"
+				bot.send_message(message.chat.id, text)
+				#bot.send_message(message.chat.id,'Добро пожаловать в Некославию! Каждому гражданину, согласно конституции, полагается некодевочка, держи свою\n\n/cmd - список комманд\n\n/help - полезные ссылки')
+				#time.sleep(1)
+				#text = 'Надо бы пояснить тебе наши порядки. <b>Некославия</b> - великая держава, а великая держава должна заботиться о благополучии своих гражданах, не так ли? Для этого запущена специальная социальная программа - каждому полагается по некодевочке, без очередей и налогов. К счастью, благодаря новейшим разработкам у нас их достаточно. По закону каждый некослав обязан заботиться о своей некодевочке, а её смерть уголовно наказуема'
+				#bot.send_photo(message.chat.id, photo = 'AgACAgIAAx0CZQN7rQACsJRi4vTvzOG-zrdVRRS3iQhKUm-K_QAC37oxG6IdGEsIcBwLxnaZgwEAAwIAA3MAAykE',caption = text)
+				#time.sleep(1)
+				#text = 'А вот и твоя некодевочка. Вероятно, она проголодалась пока ждала тебя. Напиши "неко" чтобы убедиться в этом, а когда покормишь - не забудь дать ей имя'
+				#bot.send_photo(message.chat.id, photo = p,caption = text)
+				#time.sleep(1)
+				#photo_design = 'AgACAgIAAx0CZQN7rQABAicRZSFoSY43lFLhRbyeeXPlv55ekY8AArbPMRvwnghJbqkwodtNPHcBAAMCAAN5AAMwBA' 
+				#f = create_licension(bot,p,photo_design,message.from_user.first_name,0)
+				#m = bot.send_photo(message.chat.id, photo=f,caption = 'И самое главное, держи лицензию 🎫 на свою некодевочку. Нужно будет продлить её через 4 дня, если не хочешь платить штраф, конечно')
+				#cursor.execute(f"UPDATE neko SET photo_licension = '{m.photo[-1].file_id}' WHERE id = {message.from_user.id}")
 				return
 			else:
 				bot.send_message(message.chat.id,'Ты не один из нас, напиши /start чтобы стать некославом ')
@@ -113,7 +119,8 @@ def msg_text(message,bot):
 		boss_kd = int(data[44] - time.time())
 		happy = int(time.time() - data[45])
 		gladit_kd = int(data[46] - time.time())
-
+		intro_level = data[47]
+		
 		if ch != message.chat.id:
 			ch = message.chat.id
 			cursor.execute(f'UPDATE neko SET chat = {ch} WHERE id = {message.from_user.id}')
@@ -140,7 +147,10 @@ def msg_text(message,bot):
 			else:
 				bot.send_message(message.chat.id, 'Хуйню сморозил')
 			return
-
+		if cmd in blocked_cmd.get(intro_level):
+			bot.send_message(message.chat.id, 'Команда недоступна на текущем уровне обучения\n\n<i>Письма приходят только когда ты кормишь некодевочку</i>')
+			bot.send_sticker(message.chat.id, 'CAACAgIAAxkBAAEKbkNlGcyWsw1T1RXhFZGTgaGzubYD_AACIA8AAg7tWEjVrCd9QwTr1jAE')
+			return	
 		if cmd == 'неко':
 			markup = types.InlineKeyboardMarkup()
 			switch_button1 = types.InlineKeyboardButton(text='Покормить 🐟', switch_inline_query_current_chat = "Покормить")
@@ -365,6 +375,20 @@ def msg_text(message,bot):
 				bot.send_message(message.chat.id,text)
 				bot.send_sticker(message.chat.id, 'CAACAgIAAxkBAAEFLXFiwHwWe1jhzAgMe071rTZ4ureX3AACJRAAAhQoWEiDQZVvpXK9GikE')
 				cursor.execute(f"UPDATE neko SET notifed = FALSE, rep = {rep},inventory = '{pack(inventory)}', kormit = {kormit} WHERE id = {message.from_user.id}")
+				if intro_level == 0 or intro_level == 1:
+					keyboard = types.InlineKeyboardMarkup()
+					callback_button1 = types.InlineKeyboardButton(text = 'Читать 👀',callback_data = f'letter {message.from_user.id} {intro_level}')
+					keyboard.add(callback_button1)
+					txt = 'Тебе письмо ебать'
+					m = bot.send_photo(message.chat.id, photo = 'AgACAgIAAx0CZQN7rQAC1PhjVwdShxawIYgm_OAkJPMXuOBWiQAClsgxG1hTuEqsn8YQrmq_egEAAwIAA3MAAyoE',caption = txt,reply_markup=keyboard)
+					schedule.every(DELETE_MINUTES).minutes.do(job_delete,bot,m.chat.id,m.id)
+					cursor.execute(f"UPDATE neko SET intro_level = intro_level + 1 WHERE id = {message.from_user.id}")
+					if intro_level == 1:
+						licension = int(time.time() + LICENSION_TIMEOUT)
+						photo_design = 'AgACAgIAAx0CZQN7rQABAicRZSFoSY43lFLhRbyeeXPlv55ekY8AArbPMRvwnghJbqkwodtNPHcBAAMCAAN5AAMwBA' 
+						f = create_licension(bot,phot,photo_design,message.from_user.first_name,gender)
+						m = bot.send_photo(ME_CHATID, photo=f)
+						cursor.execute(f"UPDATE neko SET licension = {licension}, photo_licension = '{m.photo[-1].file_id}' WHERE id = {message.from_user.id}")
 		elif cmd == 'выгулять':
 			if gulat > 0:
 				g = math.ceil(gulat/3600)
@@ -1561,7 +1585,8 @@ def msg_text(message,bot):
 			if gender == 1:
 				text = 'Используя это инновационное устройство на своей базе, ты можешь создавать стильную одежду для своего некомальчика, которая повысит его живучесть в бою'
 			text += '\n\n👖 Штаны за 40 гривень\nРецепт:  💰 Некогривны × 40\nХарактеристики:  +1 макс хп 💗\n\n👗 Костюм горничной\nРецепт:  📦 Картон × 5\nХарактеристики:  +2 макс хп 💗\n\n🦺 Куртка санса\nРецепт:  📦 Картон × 10 | 🦴 Кость санса × 5\nХарактеристики:  +4 макс хп 💗\n\n<code>Создать [назв]</code><i> - скрафтить указанный предмет</i>'
-			bot.send_photo(message.chat.id, photo = 'AgACAgIAAx0CZQN7rQABAR65ZKYfNZQGIfOkltcTbpV6pEUaPwUAArvMMRsoDDFJwbOoTQHZinsBAAMCAANzAAMvBA',caption = text,reply_markup=keyboard)
+			m = bot.send_photo(message.chat.id, photo = 'AgACAgIAAx0CZQN7rQABAR65ZKYfNZQGIfOkltcTbpV6pEUaPwUAArvMMRsoDDFJwbOoTQHZinsBAAMCAANzAAMvBA',caption = text,reply_markup=keyboard)
+			schedule.every(DELETE_MINUTES).minutes.do(job_delete,bot,m.chat.id,m.id)
 		elif cmd == 'пуск' or cmd == 'слоты':
 			cost = 10
 			if coins < cost:

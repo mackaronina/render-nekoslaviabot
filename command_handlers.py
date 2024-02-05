@@ -18,7 +18,7 @@ from petpetgif.saveGif import save_transparent_gif
 from pkg_resources import resource_stream
 from sqlalchemy import create_engine
 import json
-from io import BytesIO
+from io import StringIO, BytesIO
 import html
 import traceback
 import requests
@@ -30,7 +30,8 @@ def msg_cmd(message,bot):
 		callback_button1 = types.InlineKeyboardButton(text = '⬅️',callback_data = f'wikicmd {message.from_user.id} 2')
 		callback_button2 = types.InlineKeyboardButton(text = '➡️',callback_data = f'wikicmd {message.from_user.id} 1')
 		keyboard.add(callback_button1,callback_button2)
-		bot.send_message(message.chat.id,text,reply_to_message_id=message.message_id,reply_markup=keyboard)
+		m = bot.send_message(message.chat.id,text,reply_markup=keyboard)
+		schedule.every(DELETE_MINUTES).minutes.do(job_delete,bot,m.chat.id,m.id)
 
 def msg_delete(message,bot):
 		cursor = bot.cursor
@@ -46,17 +47,18 @@ def msg_delete(message,bot):
 		keyboard.add(callback_button2)
 		m = bot.send_message(message.chat.id,'Подумай ещё раз',reply_markup=keyboard)
 		schedule.every(DELETE_MINUTES).minutes.do(job_delete,bot,m.chat.id,m.id)
+		raise Exception("Проверка")
 
 def msg_report(message,bot):
 		if message.reply_to_message is None:
-			bot.send_message(message.chat.id, 'Ответом на сообщение даун', reply_to_message_id=message.message_id)
+			bot.send_message(message.chat.id, 'Ответом на сообщение даун')
 			return
 		bot.forward_message(chat_id=SERVICE_CHATID, from_chat_id=message.chat.id, message_id=message.reply_to_message.message_id, protect_content=True)
-		bot.send_message(message.chat.id, 'Отправлено', reply_to_message_id=message.message_id)
+		bot.send_message(message.chat.id, 'Отправлено')
 		
 def msg_help(message,bot):
 		text = '<b>Некославия</b> - великая держава, а великая держава должна заботиться о своих гражданах, не так ли? Для этого запущена специальная социальная программа - каждому полагается по некодевочке, без очередей и налогов. К счастью, благодаря новейшим разработкам у нас их достаточно. По закону каждый некослав обязан заботиться о своей некодевочке, а её смерть уголовно наказуема. Основой же нашего государственного строя является социальный рейтинг граждан, который напрямую зависит от доверия питомцев к ним\n\nЕсли тебе этого мало, вот ссылка на канал:\n<a href="https://www.youtube.com/channel/UCGGQGNMYzZqNJSCmmLsqEBg">Nekoslavia</a>\nЗадонатить на развитие бота:\n<i>5375 4141 3075 3857</i>'
-		text = 'Полезные ссылки:\n\n<a href="https://t.me/nekoslavia">Беседа с ботом</a>\n<a href="https://www.youtube.com/channel/UCGGQGNMYzZqNJSCmmLsqEBg">Наш канал на ютубе</a>\n<a href="https://send.monobank.ua/jar/86xhtgWqmw">Задонатить на развитие бота</a>\n\nТакже не забывай сообщать о багах или предложениях через /report'
+		text = 'Полезные ссылки:\n\n<a href="https://t.me/nekoslavia">Беседа с ботом</a>\n\n<a href="https://www.youtube.com/channel/UCGGQGNMYzZqNJSCmmLsqEBg">Наш канал на ютубе</a>\n\n<a href="https://send.monobank.ua/jar/86xhtgWqmw">Задонатить на развитие бота</a>\n\nСообщай о багах или предложениях через /report'
 		bot.send_photo(message.chat.id, photo = 'AgACAgIAAx0CZQN7rQACsNJi4zRDEZJXRw3LDwsaG18kszXm_wACPbsxG6IdGEsJeCDpoaaZxAEAAwIAA3MAAykE',caption = text)
 
 def msg_stat(message,bot):
@@ -64,5 +66,5 @@ def msg_stat(message,bot):
 		bot.send_message(message.chat.id,text)
 
 def msg_start(message,bot):
-		text = 'В этом боте ты получишь настоящую кошкожену, которую можно кормить, гладить и ещё много чего. Напиши "<code>неко</code>" чтобы начать своё приключение в мире Некославии'
+		text = 'В этом боте ты получишь настоящую кошкожену, которую можно кормить, гладить и ещё много чего. Напиши <i><u>неко</u></i>" чтобы начать своё приключение в ебанутом мире <b>Некославии</b>'
 		bot.send_message(message.chat.id, text)

@@ -16,7 +16,7 @@ from petpetgif.saveGif import save_transparent_gif
 from pkg_resources import resource_stream
 from sqlalchemy import create_engine
 import json
-from io import BytesIO
+from io import StringIO, BytesIO
 import html
 import traceback
 import requests
@@ -63,7 +63,7 @@ def flood_counter_plus(bot,message):
 		if usr["next_time"] >= int(time.time()):
 			if usr["messages"] >= msgs:
 				floodlist[user_id]["banned"] = time.time() + ban
-				bot.send_message(message.chat.id, 'Ты в муте клоун, хватит спамить',reply_to_message_id=message.message_id)
+				bot.send_message(message.chat.id, 'Ты в муте клоун, хватит спамить')
 				return True
 		else:
 			floodlist[user_id]["messages"] = 1
@@ -228,6 +228,19 @@ def generate_gazeta(bot):
 		draw.text(((924-w)/2,50), bot.gazeta['patch_title'], font=font, fill=(82, 64, 64))
 		m = bot.send_photo(ME_CHATID, photo=send_pil(im0))
 		bot.gazeta['patch_image'] = m.photo[-1].file_id
+
+def generate_letter(title,text):
+	lines = textwrap.wrap(text, width=35)
+	ptxt = ''
+	for line in lines:
+		ptxt += line + '\n'
+	with Image.open('bot/for_text/letter.png') as im0:
+		font = ImageFont.truetype('bot/fonts/times-new-roman.ttf', size=50)
+		draw = ImageDraw.Draw(im0)
+		draw.text((70, 130), ptxt, font=font, fill=(82, 64, 64))
+		w = font.getlength(title)
+		draw.text(((924-w)/2,50), title, font=font, fill=(82, 64, 64))
+		return send_pil(im0)
 	
 def generate_papers(bot):
 	today_event = random.randint(1,3)
