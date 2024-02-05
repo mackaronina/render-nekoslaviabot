@@ -47,9 +47,9 @@ bot.set_webhook(url=APP_URL)
 random.seed()
 
 gazeta = {
-	'patch_version': 1005,
-	'patch_title': 'Ура',
-	'patch_text': 'Наконец-то бот заработал. Компенсации не будет, сосите',
+	'patch_version': 1006,
+	'patch_title': 'Патчноут',
+	'patch_text': 'Добавлено что-то похожее на обучение, если вам будут приходить какие-то письма сожгите их нахуй',
 	'patch_image': ''
 }
 

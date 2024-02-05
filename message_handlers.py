@@ -385,7 +385,6 @@ def msg_text(message,bot):
 					cursor.execute(f"UPDATE neko SET intro_level = intro_level + 1 WHERE id = {message.from_user.id}")
 					if intro_level == 1:
 						licension = int(time.time() + LICENSION_TIMEOUT)
-						photo_design = 'AgACAgIAAx0CZQN7rQABAicRZSFoSY43lFLhRbyeeXPlv55ekY8AArbPMRvwnghJbqkwodtNPHcBAAMCAAN5AAMwBA' 
 						f = create_licension(bot,phot,photo_design,message.from_user.first_name,gender)
 						m = bot.send_photo(ME_CHATID, photo=f)
 						cursor.execute(f"UPDATE neko SET licension = {licension}, photo_licension = '{m.photo[-1].file_id}' WHERE id = {message.from_user.id}")
