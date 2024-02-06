@@ -42,14 +42,13 @@ def callback_get(call,bot):
 def callback_process(call,bot):
 	cursor = bot.cursor
 	db = bot.db
-	today_text = bot.zavod['today_text']
 	patch_version = bot.gazeta['patch_version']
 	patch_image = bot.gazeta['patch_image']
 
 	cmd_for_many = ['decline','accept','pvp','pjoin','bjoin','buy','poker','hand','boss']
 	cmd_for_db = [
 	'pplus','pminus','pcontinue','poker','pjoin','pstart','hand',
-	'paper',
+	'paper','spravka',
 	'move','pve','interact','back',
 	'bend','bjoin','bstart','bcontinue','buy','boss',
 	'decline','accept','aremove','pvp'
@@ -147,7 +146,7 @@ def callback_process(call,bot):
 		bone_automate2 = data[37]
 		equipped2 = data[38]
 		skills2 = [skill1,skill2]
-		if rep2 < 20:
+		if rep2 < REP_ARENA:
 			txt = 'Некодевочка недостаточно доверяет тебе'
 			if gender2 == 1:
 				txt = 'Некомальчик недостаточно доверяет тебе'
@@ -1226,7 +1225,7 @@ def callback_process(call,bot):
 		if boss_kd > 0:
 			answer_callback_query(bot,call,'Дай неко отдохнуть')
 			return
-		if rep < 120:
+		if rep < REP_BOSS:
 			answer_callback_query(bot,call,'Недостаточно доверия')
 			return
 		if check_all(bot, call.from_user.id) is not None :
@@ -1594,7 +1593,8 @@ def callback_process(call,bot):
 				keyboard.add(callback_button1)
 				callback_button2 = types.InlineKeyboardButton(text = 'Не читать ❌',callback_data = 'dont ' + str(idk))
 				keyboard.add(callback_button2)
-				bot.send_photo(call.message.chat.id, photo = 'AgACAgIAAx0CZQN7rQACznBjQgABiPsE5FE7am8mfAOKiXsSOEsAAju9MRuS1hFKlyErHhjWQfcBAAMCAANzAAMqBA',caption = 'Возвращаясь с работы, ты заметил свежую газету, торчащую из твоего почтового ящика. Прочитать её?',reply_markup=keyboard)
+				m = bot.send_photo(call.message.chat.id, photo = 'AgACAgIAAx0CZQN7rQACznBjQgABiPsE5FE7am8mfAOKiXsSOEsAAju9MRuS1hFKlyErHhjWQfcBAAMCAANzAAMqBA',caption = 'Возвращаясь с работы, ты заметил свежую газету, торчащую из твоего почтового ящика. Прочитать её?',reply_markup=keyboard)
+				schedule.every(DELETE_MINUTES).minutes.do(job_delete,bot,m.chat.id,m.id)
 		else:
 			args = images[stage]
 			args = args.split()
@@ -1613,7 +1613,8 @@ def callback_process(call,bot):
 			bot.edit_message_media(media=telebot.types.InputMedia(media=phot,type="photo", parse_mode='HTML'),chat_id=call.message.chat.id, message_id=call.message.message_id,reply_markup=keyboard)
 			db[key] = pack(struct)
 	elif cmd == "spravka":
-		txt = today_text
+		struct = unpack(db[key])
+		txt = struct['today_text']
 		answer_callback_query(bot,call,txt,True)
 	elif cmd == "wikicmd":
 		state = int(args[2])
@@ -1668,12 +1669,12 @@ def callback_process(call,bot):
 		answer_callback_query(bot,call,'Успешно')
 		title = "От министерства интеграции"
 		texts = [
-		"Поздравляем с получением гражданства Некославии. Вам с некодевочкой предоставлена однокомнатная квартира, а также рабочее место на ближайшем заводе, где вы сможете трудиться на благо родины. Славься Некославия!",
+		"Поздравляем с получением гражданства Некославии. Вам с некодевочкой была предоставлена однокомнатная квартира, а также рабочее место на ближайшем заводе, где вы сможете трудиться на благо родины. Славься Некославия!",
 		"Ваша лицензия на некодевочку готова и лежит в этом письме. Не теряйте её и не забывайте вовремя продлевать, если не хотите проблем с законом. Славься Некославия!"
 		]
 		descs = [
 		"<i>Разблокированы команды <u>некобаза</u>, <u>гараж</u>, <u>завод</u></i>",
-		"<i>Разблокированы команды <u>лицензия</u>, <u>продлить</u></i>"
+		"<i>Разблокирована команда <u>лицензия</u></i>"
 		]
 		f = generate_letter(title,texts[state])
 		bot.edit_message_media(media=telebot.types.InputMedia(media=f, type="photo", caption = descs[state], parse_mode='HTML'), chat_id=call.message.chat.id, message_id=call.message.message_id)

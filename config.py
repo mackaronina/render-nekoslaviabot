@@ -735,7 +735,8 @@ struct_papers = {
 	'chat': 0,
 	'message': 0,
 	'stage': 0,
-	'mistakes': 0
+	'mistakes': 0,
+	'today_text': ''
 }
 
 struct_poker = {
@@ -809,6 +810,10 @@ TIMESTAMP = 2*3600
 REPORT_TIMEOUT = 24*3600
 HAPPY_TIMEOUT = [-5400,-2700,0,2700,5400]
 DELETE_MINUTES = 10
+
+REP_ARENA = 30
+REP_DUNGEON = 60
+REP_BOSS = 120
 
 TOKEN = os.environ['TOKEN']
 APP_URL = os.environ['APP_URL']

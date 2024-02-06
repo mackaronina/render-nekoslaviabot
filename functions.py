@@ -243,6 +243,9 @@ def generate_letter(title,text):
 		return send_pil(im0)
 	
 def generate_papers(bot):
+	papers_images = []
+	today_text = 'абоба'
+
 	today_event = random.randint(1,3)
 	if today_event == 1:
 		bad_prof = [random.choice(prof),random.choice(prof)]
@@ -251,19 +254,23 @@ def generate_papers(bot):
 		prof_text = ['монтажникам','электрикам','токарям','сварщикам','охранникам']
 		p1 = prof_text[prof.index(bad_prof[0])]
 		p2 = prof_text[prof.index(bad_prof[1])]
-		bot.zavod['today_text'] = f'Cегодня запрещен проход {p1} и {p2}'
+		today_text = f'Cегодня запрещен проход {p1} и {p2}'
 	elif today_event == 2:
 		bad_prof = [random.choice(prof)]
 		prof_text = ['монтажники','электрики','токари','сварщики','охранники']
 		p = prof_text[prof.index(bad_prof[0])]
-		bot.zavod['today_text'] = f'Cегодня {p} обязаны носить защитные каски'
+		today_text = f'Cегодня {p} обязаны носить защитные каски'
 	elif today_event == 3:
 		bad_prof = [random.choice(prof)]
 		prof_text = ['монтажники','электрики','токари','сварщики','охранники']
 		p = prof_text[prof.index(bad_prof[0])]
-		bot.zavod['today_text'] = f'Cегодня {p} должны иметь печать, подтверждающую их квалификацию'
-	print(bot.zavod['today_text'])
-	for k in range(1,11):
+		today_text = f'Cегодня {p} должны иметь печать, подтверждающую их квалификацию'
+
+	nums = [random.randint(1,10),random.randint(1,10),random.randint(1,10)]
+	while nums[0] == nums[1] or nums[1] == nums[2] or nums[0] == nums[2]:
+		nums = [random.randint(1,10),random.randint(1,10),random.randint(1,10)]
+
+	for k in nums:
 		propusk = random.choice([True,False])
 		reason = 0
 		if not propusk:
@@ -336,9 +343,9 @@ def generate_papers(bot):
 					im0.paste(im2.convert('RGB'), (684,173),im2)
 			m = bot.send_photo(ME_CHATID, photo=send_pil(im0))
 			img = m.photo[-1].file_id
-			bot.zavod['papers_images'].append(f'{img} {propusk} {reason}')
-			time.sleep(1)
-	
+			papers_images.append(f'{img} {propusk} {reason}')
+	return (today_text,papers_images)
+
 def equ(row):
 	if -1 in row:
 		return -1

@@ -27,7 +27,6 @@ def msg_text(message,bot):
 		cursor = bot.cursor
 		db = bot.db
 		patch_version = bot.gazeta['patch_version']
-		papers_images = bot.zavod['papers_images']
 		
 		message.text = message.text.replace('@NekoslaviaBot','').strip()
 		cmd = message.text.lower()
@@ -574,9 +573,6 @@ def msg_text(message,bot):
 			cur = datetime.fromtimestamp(time.time() + TIMESTAMP)
 			d = int(cur.day)
 			h = int(cur.hour)
-			if len(papers_images) != 10:
-				bot.send_message(message.chat.id, 'Завод закрыт на ремонт, иди нахуй крч')
-				return
 			if h >= 5 and h < 9:
 				pic = 'AgACAgIAAx0CZQN7rQAC1cRjWHHPqKY27zwSInf6YS46TjgN3wAC3r4xG2_iyEpm4U7RaB2iRQEAAwIAA3MAAyoE'
 			else:
@@ -604,14 +600,7 @@ def msg_text(message,bot):
 					schedule.every(DELETE_MINUTES).minutes.do(job_delete,bot,m.chat.id,m.id)
 				cursor.execute(f"UPDATE neko SET coins = {coins} ,version = {patch_version} WHERE id = {message.from_user.id}")
 			else:
-				p1 = random.choice(papers_images)
-				p2 = random.choice(papers_images)
-				p3 = random.choice(papers_images)
-				while p1 == p2 or p1 == p3 or p2 == p3:
-					p1 = random.choice(papers_images)
-					p2 = random.choice(papers_images)
-					p3 = random.choice(papers_images)
-				images = [p1,p2,p3]
+				res = generate_papers(bot)
 				if days == 4:
 					txt = 'Поздравляем с первым днем на новой должности! В твои обязанности входит проверять документы некочанов и либо пропускать их, либо слать нахуй. Подробнее можно прочитать в руководстве 📕. Помни, твоя зарплата зависит от количества правильных решений'
 				else:
@@ -624,7 +613,8 @@ def msg_text(message,bot):
 				m = bot.send_photo(message.chat.id,photo=pic,caption = txt, reply_markup=keyboard)
 				struct = struct_papers.copy()
 				struct['players'] = [message.from_user.id]
-				struct['images'] = images
+				struct['today_text'] = res[0]
+				struct['images'] = res[1]
 				struct['wait'] = int(time.time() + 600)
 				struct['chat'] = message.chat.id
 				struct['message'] = m.id
@@ -1281,7 +1271,7 @@ def msg_text(message,bot):
 		elif first_word == 'бой':
 			args = words		
 			if len(args) == 2:
-				if rep < 20:
+				if rep < REP_ARENA:
 					text = 'К сожалению, у тебя не получилось убедить некодевочку пойти с тобой на арену'
 					if gender == 1:
 						text = 'К сожалению, у тебя не получилось убедить некомальчика пойти с тобой на арену'
@@ -1340,16 +1330,8 @@ def msg_text(message,bot):
 				struct['chat'] = message.chat.id
 				struct['message'] = m.id
 				db[message.from_user.id] = pack(struct)
-		elif cmd == 'арена':  
-			if rep < 20:
-				text = nam + ' отказалась идти на арену, и я её прекрасно понимаю'
-				if gender == 1:
-					text = nam + ' отказался идти на арену, и я его прекрасно понимаю'
-				bot.send_message(message.chat.id,text)
-				bot.send_sticker(message.chat.id, 'CAACAgIAAxkBAAEFLY5iwIflAaGLlpw7vXvQvEvJcWilzgACjxEAAqg6WEjqQFCw4uPiwikE')
-				return
+		elif cmd == 'арена':
 			text = 'Очевидно, бои некодевочек нелегальны, поэтому опустим лишние подробности. Обязательным условием проведения боя является ставка, часть которой организаторы забирают себе. На входе тебя уверили, что ещё ни одна некодевочка не умерла\nЛучшие некодевочки арены:\n\n'
-
 			data = cursor.execute(f'SELECT name,wins FROM neko ORDER BY wins DESC LIMIT 10')
 			data = data.fetchall()
 			i = 0
@@ -1392,10 +1374,7 @@ def msg_text(message,bot):
 				f = create_licension(bot,phot,photo_design,message.from_user.first_name,gender)
 				m = bot.send_photo(message.chat.id, photo=f,caption = 'Вот твоя новая лицензия 🎫, не теряй её и не забывай вовремя продлевать')
 				fil = m.photo[-1].file_id
-				cursor.execute(f"UPDATE neko SET coins = "+ str(coins) +" WHERE id = "+str(message.from_user.id))
-				cursor.execute(f"UPDATE neko SET licension = {int(time.time() + LICENSION_TIMEOUT)} WHERE id = {message.from_user.id}")
-				cursor.execute(f"UPDATE neko SET photo_licension = '"+ fil +"' WHERE id = "+str(message.from_user.id))
-				
+				cursor.execute(f"UPDATE neko SET photo_licension = '{fil}', licension = {int(time.time() + LICENSION_TIMEOUT)}, coins = {coins} WHERE id = {message.from_user.id}")		
 		elif cmd == 'войти':
 			if not car:
 				bot.send_message(message.chat.id, 'Тебе нужен некомобиль еблана кусок')
@@ -1411,7 +1390,7 @@ def msg_text(message,bot):
 					bot.send_message(message.chat.id, f'Харош, дай отдохнуть своему некомальчику хотя бы день\n\n<i>Осталось отдыхать {d} часов </i>')
 				bot.send_sticker(message.chat.id, 'CAACAgIAAxkBAAEFP2VizLFlogiFH1n3Rpg9Hki7DC1y_wACjxEAAqg6WEjqQFCw4uPiwikE')
 				return
-			if rep < 60:
+			if rep < REP_DUNGEON:
 				text = nam + ' отказалась входить, не стоит её заставлять'
 				if gender == 1:
 					text = nam + ' отказался входить, не стоит его заставлять'
@@ -1531,7 +1510,7 @@ def msg_text(message,bot):
 					bot.send_message(message.chat.id, f'Харош, дай отдохнуть своему некомальчику хотя бы день\n\n<i>Осталось отдыхать {d} часов </i>')
 				bot.send_sticker(message.chat.id, 'CAACAgIAAxkBAAEFP2VizLFlogiFH1n3Rpg9Hki7DC1y_wACjxEAAqg6WEjqQFCw4uPiwikE')
 				return
-			if rep < 120:
+			if rep < REP_BOSS:
 				text = nam + ' зассала браться за это дело'
 				if gender == 1:
 					text = nam + ' зассал браться за это дело'

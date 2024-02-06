@@ -53,11 +53,6 @@ gazeta = {
 	'patch_image': ''
 }
 
-zavod = {
-	'papers_images': [],
-	'today_text': 'Условие недоступно'
-}
-
 antiflood = {
 	'blocked_messages': [],
 	'blocked_users': [],
@@ -68,7 +63,6 @@ db = {}
 
 setattr(bot,'cursor',cursor)
 setattr(bot,'gazeta',gazeta)
-setattr(bot,'zavod',zavod)
 setattr(bot,'antiflood',antiflood)
 setattr(bot,'db',db)
 
@@ -100,9 +94,7 @@ def updater():
 		time.sleep(1)
 		
 def bot_start():
-	time.sleep(120)
 	generate_gazeta(bot)
-	generate_papers(bot)
 
 schedule.every(60).seconds.do(jobupd,bot)
 Thread(target=bot_start).start()
