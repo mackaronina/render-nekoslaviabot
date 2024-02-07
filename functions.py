@@ -241,41 +241,13 @@ def generate_letter(title,text):
 		w = font.getlength(title)
 		draw.text(((924-w)/2,50), title, font=font, fill=(82, 64, 64))
 		return send_pil(im0)
-	
-def generate_papers(bot):
-	papers_images = []
-	today_text = 'абоба'
 
-	today_event = random.randint(1,3)
-	if today_event == 1:
-		bad_prof = [random.choice(prof),random.choice(prof)]
-		while bad_prof[0] == bad_prof[1]:
-			bad_prof = [random.choice(prof),random.choice(prof)]
-		prof_text = ['монтажникам','электрикам','токарям','сварщикам','охранникам']
-		p1 = prof_text[prof.index(bad_prof[0])]
-		p2 = prof_text[prof.index(bad_prof[1])]
-		today_text = f'Cегодня запрещен проход {p1} и {p2}'
-	elif today_event == 2:
-		bad_prof = [random.choice(prof)]
-		prof_text = ['монтажники','электрики','токари','сварщики','охранники']
-		p = prof_text[prof.index(bad_prof[0])]
-		today_text = f'Cегодня {p} обязаны носить защитные каски'
-	elif today_event == 3:
-		bad_prof = [random.choice(prof)]
-		prof_text = ['монтажники','электрики','токари','сварщики','охранники']
-		p = prof_text[prof.index(bad_prof[0])]
-		today_text = f'Cегодня {p} должны иметь печать, подтверждающую их квалификацию'
-
-	nums = [random.randint(1,10),random.randint(1,10),random.randint(1,10)]
-	while nums[0] == nums[1] or nums[1] == nums[2] or nums[0] == nums[2]:
-		nums = [random.randint(1,10),random.randint(1,10),random.randint(1,10)]
-
-	for k in nums:
-		propusk = random.choice([True,False])
-		reason = 0
-		if not propusk:
-			reason = random.randint(1,5)
-		with Image.open('bot/zavod/papers.png') as im0:
+def single_paper(bot,bad_prof,today_event,k,papers_images):
+	propusk = random.choice([True,False])
+	reason = 0
+	if not propusk:
+		reason = random.randint(1,5)
+	with Image.open('bot/zavod/papers.png') as im0:
 			#reason = 2 ДЛЯ ИВЕНТА
 			if reason == 1:
 				#ФОТОГРАФИЯ
@@ -344,6 +316,39 @@ def generate_papers(bot):
 			m = bot.send_photo(ME_CHATID, photo=send_pil(im0))
 			img = m.photo[-1].file_id
 			papers_images.append(f'{img} {propusk} {reason}')
+
+def generate_papers(bot):
+	papers_images = []
+	today_text = 'абоба'
+
+	today_event = random.randint(1,3)
+	if today_event == 1:
+		bad_prof = [random.choice(prof),random.choice(prof)]
+		while bad_prof[0] == bad_prof[1]:
+			bad_prof = [random.choice(prof),random.choice(prof)]
+		prof_text = ['монтажникам','электрикам','токарям','сварщикам','охранникам']
+		p1 = prof_text[prof.index(bad_prof[0])]
+		p2 = prof_text[prof.index(bad_prof[1])]
+		today_text = f'Cегодня запрещен проход {p1} и {p2}'
+	elif today_event == 2:
+		bad_prof = [random.choice(prof)]
+		prof_text = ['монтажники','электрики','токари','сварщики','охранники']
+		p = prof_text[prof.index(bad_prof[0])]
+		today_text = f'Cегодня {p} обязаны носить защитные каски'
+	elif today_event == 3:
+		bad_prof = [random.choice(prof)]
+		prof_text = ['монтажники','электрики','токари','сварщики','охранники']
+		p = prof_text[prof.index(bad_prof[0])]
+		today_text = f'Cегодня {p} должны иметь печать, подтверждающую их квалификацию'
+
+	nums = [random.randint(1,10),random.randint(1,10),random.randint(1,10)]
+	while nums[0] == nums[1] or nums[1] == nums[2] or nums[0] == nums[2]:
+		nums = [random.randint(1,10),random.randint(1,10),random.randint(1,10)]
+	for k in nums:
+		Thread(target=single_paper, args=(bot,bad_prof,today_event,k,papers_images)).start()
+	while True:
+		if len(papers_images) == 3:
+			break
 	return (today_text,papers_images)
 
 def equ(row):
