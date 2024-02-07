@@ -600,7 +600,6 @@ def msg_text(message,bot):
 					schedule.every(DELETE_MINUTES).minutes.do(job_delete,bot,m.chat.id,m.id)
 				cursor.execute(f"UPDATE neko SET coins = {coins} ,version = {patch_version} WHERE id = {message.from_user.id}")
 			else:
-				res = generate_papers(bot)
 				if days == 4:
 					txt = 'Поздравляем с первым днем на новой должности! В твои обязанности входит проверять документы некочанов и либо пропускать их, либо слать нахуй. Подробнее можно прочитать в руководстве 📕. Помни, твоя зарплата зависит от количества правильных решений'
 				else:
@@ -610,7 +609,8 @@ def msg_text(message,bot):
 				switch_button1 = types.InlineKeyboardButton(text='Руководство 📕', switch_inline_query_current_chat = "Руководство")
 				keyboard.add(callback_button1)
 				keyboard.add(switch_button1)
-				m = bot.send_photo(message.chat.id,photo=pic,caption = txt, reply_markup=keyboard)
+				m = bot.send_photo(message.chat.id, photo=pic, caption=txt)
+				res = generate_papers(bot)
 				struct = struct_papers.copy()
 				struct['players'] = [message.from_user.id]
 				struct['today_text'] = res[0]
@@ -619,6 +619,7 @@ def msg_text(message,bot):
 				struct['chat'] = message.chat.id
 				struct['message'] = m.id
 				db[message.from_user.id] = pack(struct)
+				bot.edit_message_caption(caption=txt, chat_id=m.chat.id, message_id=m.id, reply_markup=keyboard)
 		elif cmd == 'выгнать дебилов':
 			if debil:
 				bot.send_message(message.chat.id, 'Дебилы уже ушли')
