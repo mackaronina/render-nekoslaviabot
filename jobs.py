@@ -51,8 +51,7 @@ def jobupd(bot):
 			#        pass
 			#    add_to_dead(cursor,nam, 'Смерть от голода')
 			#    cursor.execute(f"DELETE FROM neko WHERE id = "+str(idk))
-		kkeys = db.keys()	
-		for key in kkeys:
+		for key in list(db.keys()):
 			struct = unpack(db[key])
 			wait = struct['wait']
 			gametype = struct['type']

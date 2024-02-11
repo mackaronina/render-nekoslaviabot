@@ -47,7 +47,6 @@ def msg_delete(message,bot):
 		keyboard.add(callback_button2)
 		m = bot.send_message(message.chat.id,'Подумай ещё раз',reply_markup=keyboard)
 		schedule.every(DELETE_MINUTES).minutes.do(job_delete,bot,m.chat.id,m.id)
-		raise Exception("Проверка")
 
 def msg_report(message,bot):
 		if message.reply_to_message is None:
