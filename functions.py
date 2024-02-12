@@ -916,8 +916,8 @@ def dungeon_keyboard(keyboard,idk):
 	callback_button4 = types.InlineKeyboardButton(text = '➡️',callback_data = 'move ' + str(idk) + ' 2 ')
 	callback_button5 = types.InlineKeyboardButton(text = '⬇️',callback_data = 'move ' + str(idk) + ' 3 ')
 	callback_button6 = types.InlineKeyboardButton(text = 'Уйти 🔚',callback_data = 'back ' + str(idk))
-	keyboard.add(callback_button1,callback_button5,callback_button2,callback_button4)
-	keyboard.add(callback_button6)
+	keyboard.add(callback_button1,callback_button5,callback_button2,callback_button4,callback_button6)
+	#keyboard.add(callback_button6)
 	
 def target_keyboard(keyboard,targ,dat,rer1,rer2):
 	if targ == 0:
