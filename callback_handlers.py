@@ -548,7 +548,7 @@ def callback_process(call,bot):
 			db[key] = pack(struct)
 			txt += f'\n\nДобыча:   {co} 💰   {wh} 🍫   {mo} ⚡️   {he} 🍼\n\n'
 			txt += map_text(mas)
-			keyboard = types.InlineKeyboardMarkup(row_width=4)
+			keyboard = types.InlineKeyboardMarkup(row_width=5)
 			dungeon_keyboard(keyboard,idk)
 			bot.edit_message_media(media=telebot.types.InputMedia(media='AgACAgIAAx0CZQN7rQACwsFi8ct1qI3M_i1Bt1Tk_WvAbq7BWAACqcQxG-SBkUvkDVBnBMaohgEAAwIAA3MAAykE',caption=txt,type="photo", parse_mode='HTML'),chat_id=call.message.chat.id, message_id=call.message.message_id, reply_markup=keyboard)
 			time.sleep(1)
@@ -633,7 +633,7 @@ def callback_process(call,bot):
 		db[key] = pack(struct)
 		txt = new_txt + f'\n\nДобыча:   {co} 💰   {wh} 🍫   {mo} ⚡️   {he} 🍼\n\n'
 		txt += map_text(mas)
-		keyboard = types.InlineKeyboardMarkup(row_width=4)
+		keyboard = types.InlineKeyboardMarkup(row_width=5)
 		dungeon_keyboard(keyboard,idk)
 		bot.edit_message_media(media=telebot.types.InputMedia(media=phot,caption=txt,type="photo", parse_mode='HTML'),chat_id=call.message.chat.id, message_id=call.message.message_id, reply_markup=keyboard)
    
@@ -682,7 +682,7 @@ def callback_process(call,bot):
 		if generation[cur_y][cur_x] != 0 and generation[cur_y][cur_x] != 1:
 			mas[cur_y][cur_x] = 5
 		next_gen = generation[next_y][next_x]
-		keyboard = types.InlineKeyboardMarkup(row_width=4)
+		keyboard = types.InlineKeyboardMarkup(row_width=5)
 		answer_callback_query(bot,call,'Успешно')
 		time.sleep(1)
 		if next_gen == 1:

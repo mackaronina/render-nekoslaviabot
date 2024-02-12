@@ -1477,7 +1477,7 @@ def msg_text(message,bot):
 			mas[0][0] = 3
 			maptxt = map_text(mas)
 			print(mas)
-			keyboard = types.InlineKeyboardMarkup(row_width=4)
+			keyboard = types.InlineKeyboardMarkup(row_width=5)
 			dungeon_keyboard(keyboard,message.from_user.id)
 			text = nam + ' сразу же почуствовала прохладу и сырость, а её нога вступила во что-то мокрое. Да это же огромная пещера! Исходящее отовсюду разноцветное свечение прогоняет темноту даже с самых отдалённых уголков\n\n' + 'Добыча:   0 💰   0 🍫   0 ⚡️   0 🍼\n\n'+maptxt
 			if gender == 1:
