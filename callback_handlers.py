@@ -546,7 +546,7 @@ def callback_process(call,bot):
 			generation[next_y][next_x] = 0
 			struct['hp'] = hp
 			db[key] = pack(struct)
-			txt += f'\n\nДобыча:   {co} 💰   {wh} 🍫   {mo} ⚡️   {he} 🍼\n\n'
+			txt += f'\n\n{co} 💰   {wh} 🍫   {mo} ⚡️   {he} 🍼\nдоб'
 			txt += map_text(mas)
 			keyboard = types.InlineKeyboardMarkup(row_width=5)
 			dungeon_keyboard(keyboard,idk)
@@ -631,7 +631,7 @@ def callback_process(call,bot):
 		struct['he'] = he
 		struct['hp'] = hp
 		db[key] = pack(struct)
-		txt = new_txt + f'\n\nДобыча:   {co} 💰   {wh} 🍫   {mo} ⚡️   {he} 🍼\n\n'
+		txt = new_txt + f'\n\n{co} 💰   {wh} 🍫   {mo} ⚡️   {he} 🍼\n'
 		txt += map_text(mas)
 		keyboard = types.InlineKeyboardMarkup(row_width=5)
 		dungeon_keyboard(keyboard,idk)
@@ -796,7 +796,7 @@ def callback_process(call,bot):
 		struct['cur_x'] = next_x
 		struct['cur_y'] = next_y
 		db[key] = pack(struct)
-		txt = new_txt + f'\n\nДобыча:   {co} 💰   {wh} 🍫   {mo} ⚡️   {he} 🍼\n\n'
+		txt = new_txt + f'\n\n{co} 💰   {wh} 🍫   {mo} ⚡️   {he} 🍼\n'
 		txt += map_text(mas)
 		dungeon_keyboard(keyboard,idk)
 		bot.edit_message_media(media=telebot.types.InputMedia(media=phot,caption=txt,type="photo", parse_mode='HTML'),chat_id=call.message.chat.id, message_id=call.message.message_id, reply_markup=keyboard)
