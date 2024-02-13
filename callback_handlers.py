@@ -49,7 +49,7 @@ def callback_process(call,bot):
 	cmd_for_db = [
 	'pplus','pminus','pcontinue','poker','pjoin','pstart','hand',
 	'paper','spravka',
-	'move','pve','interact','back',
+	'move','pve','interact','back','backaccept','backcancel',
 	'bend','bjoin','bstart','bcontinue','buy','boss',
 	'decline','accept','aremove','pvp'
 	]
@@ -800,8 +800,35 @@ def callback_process(call,bot):
 		txt += map_text(mas)
 		dungeon_keyboard(keyboard,idk)
 		bot.edit_message_media(media=telebot.types.InputMedia(media=phot,caption=txt,type="photo", parse_mode='HTML'),chat_id=call.message.chat.id, message_id=call.message.message_id, reply_markup=keyboard)
-
 	elif cmd == "back":
+		answer_callback_query(bot,call,'Успешно')
+		time.sleep(1)
+		keyboard = types.InlineKeyboardMarkup(row_width=2)
+		callback_button1 = types.InlineKeyboardButton(text = 'Уйти ✅',callback_data = f'backaccept {idk}')
+		callback_button2 = types.InlineKeyboardButton(text = 'Остаться ❌',callback_data = f'backcancel {idk}')
+		keyboard.add(callback_button1,callback_button2)
+		bot.edit_message_caption(chat_id=call.message.chat.id, message_id=call.message.message_id, caption=call.message.caption, reply_markup=keyboard)
+	elif cmd == "backcancel":
+		answer_callback_query(bot,call,'Успешно')
+		time.sleep(1)
+		struct = unpack(db[key])
+		generation = struct['generation']
+		cur_x = struct['cur_x']
+		cur_y = struct['cur_y']
+		gen = generation[cur_y][cur_x]
+		keyboard = types.InlineKeyboardMarkup(row_width=5)
+		if gen == 4:
+			callback_button0 = types.InlineKeyboardButton(text = 'Бросить монетку 💸',callback_data = f'interact {idk} 1')
+			keyboard.add(callback_button0)
+		elif gen == 5:
+			callback_button0 = types.InlineKeyboardButton(text = 'Набрать 🍼',callback_data = f'interact {idk} 2')
+			keyboard.add(callback_button0)
+		elif gen == 6:
+			callback_button0 = types.InlineKeyboardButton(text = 'Съесть пиццу 🍕',callback_data = f'interact {idk} 3')
+			keyboard.add(callback_button0)
+		dungeon_keyboard(keyboard,idk)
+		bot.edit_message_caption(chat_id=call.message.chat.id, message_id=call.message.message_id, caption=call.message.caption, reply_markup=keyboard)
+	elif cmd == "backaccept":
 		answer_callback_query(bot,call,'Успешно')
 		time.sleep(1)
 		data = cursor.execute(f'SELECT coins,inventory,base,gender FROM neko WHERE id = {idk}')
@@ -1314,7 +1341,8 @@ def callback_process(call,bot):
 		time.sleep(1)
 		txt = 'Внутри не было ни души. Некоторое время побродив по пустым коридорам, вы увидели силуэт, медленно приближающийся к вам\n\nБой начнётся через 15 секунд, напиши <i><u>гайд бои</u></i> если нихера не понял'
 		ph = 'AgACAgIAAx0CZQN7rQABAdk2ZQABZ1Oxc7bJUQwI0_AR_Fwa1Ak_AAKWyzEb5toBSEn9Jkb9RNRMAQADAgADcwADMAQ'
-		bot.edit_message_media(media=telebot.types.InputMedia(media=ph,caption=txt,type="photo", parse_mode='HTML'),chat_id=call.message.chat.id, message_id=call.message.message_id.id)
+		bot.edit_message_media(media=telebot.types.InputMedia(media=ph,caption=txt,type="photo", parse_mode='HTML'),chat_id=call.message.chat.id, message_id=call.message.message_idback
+			)
 		pindex = 0
 		player = players[pindex]
 		keyboard = types.InlineKeyboardMarkup(row_width=6)
