@@ -1535,7 +1535,7 @@ def callback_process(call,bot):
 		cursor.execute(f"UPDATE neko SET coins = coins - 10 WHERE id = {call.from_user.id}")
 		db[key] = pack(struct)
 		time.sleep(1)
-		bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text = txt, reply_markup=keyboard)
+		bot.edit_message_caption(chat_id=call.message.chat.id, message_id=call.message.message_id, caption = txt, reply_markup=keyboard)
 		
 	elif cmd == "read":
 		answer_callback_query(bot,call,'Успешно')

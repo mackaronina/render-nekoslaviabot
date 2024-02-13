@@ -1615,6 +1615,9 @@ def msg_text(message,bot):
 		elif cmd == 'гайд данж':
 			text = guide_text[1]
 			bot.send_message(message.chat.id, text)
+		elif cmd == 'гайд босс':
+			text = guide_text[2]
+			bot.send_message(message.chat.id, text)
 		elif cmd == 'покер':
 				minbet = 1
 				if coins < minbet*5:
