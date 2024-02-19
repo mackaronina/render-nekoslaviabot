@@ -287,7 +287,7 @@ def callback_process(call,bot):
 		else:
 			nam = nam2
 		txt = txt + 'Ходит <a href="tg://user?id='+str(turn)+'">'+str(nam)+'</a>\n'
-		txt = txt + 'Осталось шагов до атаки врага:  ' + str(turns)
+		txt = txt + 'Шагов до атаки врага:  ' + str(turns)
 		time.sleep(15)
 		if turn == one:
 			image = image2
@@ -302,6 +302,7 @@ def callback_process(call,bot):
 		db[key] = pack(struct)
 	elif cmd == "pvp":
 		one = int(args[1])
+		two = int(args[2])
 		turn = int(args[3])
 		hp1 = int(args[4])
 		hp2 = int(args[5])
@@ -474,7 +475,7 @@ def callback_process(call,bot):
 		else:
 			nam = nam2
 		txt = txt + 'Ходит <a href="tg://user?id='+str(turn)+'">'+str(nam)+'</a>\n'
-		txt = txt + 'Осталось шагов до атаки врага:  ' + str(turns)
+		txt = txt + 'Шагов до атаки врага:  ' + str(turns)
 		struct['selected'] = selected
 		db[key] = pack(struct)
 		time.sleep(1)
@@ -598,7 +599,7 @@ def callback_process(call,bot):
 		struct['hp'] = hp
 		db[key] = pack(struct)
 		txt = pve_text(enemies,nam,hp,maxhp,blocks,skills)
-		txt +=  f"Осталось шагов до атаки врага:  {turns}"
+		txt +=  f"Шагов до атаки врага:  {turns}"
 		phot = enemy_photos[f"{enemies[0]['id']} {enemies[1]['id']} {enemies[2]['id']}"]
 	   
 		time.sleep(1)
@@ -808,7 +809,7 @@ def callback_process(call,bot):
 			target_keyboard(keyboard,targ,dat,1,1)
 			field_keyboard(keyboard,dat,field,1,1,skills)
 			txt = pve_text(enemies,nam,hp,maxhp,blocks,skills)
-			txt +=  f"Осталось шагов до атаки врага:  {turns}"
+			txt +=  f"Шагов до атаки врага:  {turns}"
 			phot = enemy_photos[f"{enemies[0]['id']} {enemies[1]['id']} {enemies[2]['id']}"]
 			struct['cur_x'] = next_x
 			struct['cur_y'] = next_y
@@ -1387,7 +1388,7 @@ def callback_process(call,bot):
 		field_keyboard(keyboard,dat,all_field[pindex],1,1,all_skills[pindex])
 		zakup_use_keyboard(keyboard,zakup,dat,1,1,item_use)
 		txt = boss_text(enemies,all_name[pindex],all_poisoned[pindex],all_hp[pindex],all_maxhp[pindex],all_blocks[pindex],all_skills[pindex],player)
-		txt += f'Осталось шагов до атаки врага:  {turns}'
+		txt += f'Шагов до атаки врага:  {turns}'
 		phot = boss_photos[f"{enemies[0]['id']} {enemies[1]['id']} {enemies[2]['id']}"]
 		struct['wait'] = int(time.time() + 1800)
 		struct['event'] = 2  
@@ -1561,7 +1562,7 @@ def callback_process(call,bot):
 		field_keyboard(keyboard,dat,all_field[pindex],rer1,rer2,all_skills[pindex],selected)
 		zakup_use_keyboard(keyboard,zakup,dat,rer1,rer2,item_use)
 		txt = boss_text(enemies,all_name[pindex],all_poisoned[pindex],all_hp[pindex],all_maxhp[pindex],all_blocks[pindex],all_skills[pindex],player)
-		txt += f'Осталось шагов до атаки врага:  {turns}'
+		txt += f'Шагов до атаки врага:  {turns}'
 		phot = boss_photos[f"{enemies[0]['id']} {enemies[1]['id']} {enemies[2]['id']}"] 
 		struct['selected'] = selected
 		db[key] = pack(struct)

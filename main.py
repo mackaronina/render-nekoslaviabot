@@ -36,7 +36,7 @@ class ExHandler(telebot.ExceptionHandler):
 		sio.seek(0)
 		bot.send_document(ME_CHATID, sio)
 		return True
-bot = telebot.TeleBot(TOKEN, threaded=True, num_threads=10, parse_mode='HTML', exception_handler = ExHandler())
+bot = telebot.TeleBot(TOKEN, threaded=True, num_threads=2, parse_mode='HTML', exception_handler=ExHandler())
 
 cursor = create_engine(f'mysql+pymysql://{USERNAME}:{PASSWORD}@eu-central.connect.psdb.cloud:3306/nekodb', pool_recycle=280, connect_args={'ssl': {'ssl-mode': 'preferred'}})
 
