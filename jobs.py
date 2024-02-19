@@ -27,7 +27,7 @@ def jobupd(bot):
 		cursor = bot.cursor
 		db = bot.db
 		tim = int(time.time())
-		data = cursor.execute(f'SELECT name,id,chat,chel,notifed,kormit FROM neko WHERE kormit < {tim - 4*24*3600}')
+		data = cursor.execute(f'SELECT name,id,chat,chel,notifed,kormit,gender FROM neko WHERE kormit < {tim - 4*24*3600}')
 		data = data.fetchall()
 		for dat in data:
 			nam = dat[0]
@@ -36,21 +36,28 @@ def jobupd(bot):
 			chel = dat[3]
 			notifed = dat[4]
 			kormit = int(dat[5] - tim)
+			gender = dat[6]
 			if kormit < -4*24*3600 and not notifed:
 				try:
-					cursor.execute(f"UPDATE neko SET notifed = TRUE WHERE id = " + str(idk))
-					bot.send_message(ch, nam + ' уже не ела четыре дня! <a href="tg://user?id='+str(idk)+'">'+str(chel)+'</a>, ты охуел?')
+					txt = nam + ' уже не ела четыре дня! <a href="tg://user?id='+str(idk)+'">'+str(chel)+'</a>, ты охуел?'
+					if gender == 1:
+						txt = nam + ' уже не ел четыре дня! <a href="tg://user?id='+str(idk)+'">'+str(chel)+'</a>, ты охуел?'
+					bot.send_message(ch, txt)
 					bot.send_sticker(ch, 'CAACAgIAAxkBAAEFNvlixtyYbnUoOviqOfiUaIH6jdlPhAACuxMAAsmQWEhravemy77rYSkE')
 				except:
 					pass
-			#if kormit > 5*24*3600:
-			#    try:
-			#        bot.send_message(ch, nam + ' умерла от голода... <a href="tg://user?id='+str(idk)+'">'+str(chel)+'</a>, её смерть на твоей совести, и ты теперь изгнан из Некославии')
-			#        bot.send_sticker(ch, 'CAACAgIAAxkBAAEFNNFixbh5x7lPtkqzBN2g8YO9FAMCLgACjxEAAqg6WEjqQFCw4uPiwikE')
-			#    except:
-			#        pass
-			#    add_to_dead(cursor,nam, 'Смерть от голода')
-			#    cursor.execute(f"DELETE FROM neko WHERE id = "+str(idk))
+				cursor.execute(f"UPDATE neko SET notifed = TRUE WHERE id = " + str(idk))
+			elif kormit < -5*24*3600:
+				try:
+					txt = nam + ' умерла от голода... <a href="tg://user?id='+str(idk)+'">'+str(chel)+'</a>, её смерть на твоей совести, и ты теперь изгнан из Некославии'
+					if gender == 1:
+						txt = nam + ' умер от голода... <a href="tg://user?id='+str(idk)+'">'+str(chel)+'</a>, его смерть на твоей совести, и ты теперь изгнан из Некославии'
+					bot.send_message(ch, txt)
+					bot.send_sticker(ch, 'CAACAgIAAxkBAAEFNNFixbh5x7lPtkqzBN2g8YO9FAMCLgACjxEAAqg6WEjqQFCw4uPiwikE')
+				except:
+					pass
+				add_to_dead(cursor,nam, 'Смерть от голода')
+				cursor.execute(f"DELETE FROM neko WHERE id = "+str(idk))
 		for key in list(db.keys()):
 			struct = unpack(db[key])
 			wait = struct['wait']

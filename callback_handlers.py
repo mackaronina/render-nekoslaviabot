@@ -51,7 +51,7 @@ def callback_process(call,bot):
 	'paper','spravka',
 	'move','pve','interact','back','backaccept','backcancel',
 	'bend','bjoin','bstart','bcontinue','buy','boss',
-	'decline','accept','aremove','pvp'
+	'decline','accept','aremove','pvp','aplus','aminus','acontinue'
 	]
 	args = call.data.split()
 	cmd = args[0]
@@ -97,16 +97,57 @@ def callback_process(call,bot):
 		chel = html.escape(call.from_user.first_name, quote = True)
 		txt = '<a href="tg://user?id='+str(two)+'">'+str(chel)+'</a> оказался ссыклом...'
 		bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id,text=txt)
+	elif cmd == "aplus":
+		struct = unpack(db[key])
+		cost = struct['cost']
+		cost += 10
+		data = cursor.execute(f'SELECT coins FROM neko WHERE id = '+str(idk))
+		data = data.fetchone()
+		coins = data[0]
+		if coins < cost:
+			answer_callback_query(bot,call,'Ты бомж')
+			return
+		answer_callback_query(bot,call,'Успешно')
+		struct['cost'] = cost
+		keyboard = arena_init_keyboard(key)
+		time.sleep(1)
+		bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id,text = f'Ставка {cost} 💰',reply_markup=keyboard)
+		db[key] = pack(struct)
+	elif cmd == "aminus":
+		struct = unpack(db[key])
+		cost = struct['cost']
+		cost -= 10
+		if cost < 10:
+			answer_callback_query(bot,call,'Хуйня')
+			return
+		answer_callback_query(bot,call,'Успешно')
+		struct['cost'] = cost
+		keyboard = arena_init_keyboard(key)
+		time.sleep(1)
+		bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id,text = f'Ставка {cost} 💰',reply_markup=keyboard)
+		db[key] = pack(struct)
+	elif cmd == "acontinue":
+		struct = unpack(db[key])
+		cost = struct['cost']
+		edit_text = struct['edit_text']
+		two = struct['two']
+		edit_text += f'\nСтавка {cost} 💰'
+		answer_callback_query(bot,call,'Успешно')
+		keyboard = types.InlineKeyboardMarkup(row_width=2)
+		callback_button1 = types.InlineKeyboardButton(text = 'Принять ✅',callback_data = f'accept {key} {two}')
+		callback_button2 = types.InlineKeyboardButton(text = 'Отклонить ❌',callback_data = f'decline {key} {two}')
+		callback_button3 = types.InlineKeyboardButton(text = 'Отозвать 🚫',callback_data = f'aremove {key}')
+		keyboard.add(callback_button1,callback_button2)
+		keyboard.add(callback_button3)
+		time.sleep(1)
+		bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=edit_text, reply_markup=keyboard)
 	elif cmd == "aremove":
-		one = int(args[1])
-		two = int(args[2])
 		answer_callback_query(bot,call,'Успешно')
 		del db[key]
 		bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
 	elif cmd == "accept":
 		one = int(args[1])
 		two = int(args[2])
-		cost = int(args[3])
 		if call.from_user.id != two:
 			answer_callback_query(bot,call,'Пашол нахуй')
 			return
@@ -114,6 +155,7 @@ def callback_process(call,bot):
 			answer_callback_query(bot,call,check_all(bot, call.from_user.id))
 			return
 		struct = unpack(db[key])
+		cost = struct['cost']
 		data = cursor.execute(f'SELECT * FROM neko WHERE id = {one}')
 		data = data.fetchone()
 		nam1 = data[1]
@@ -152,12 +194,6 @@ def callback_process(call,bot):
 				txt = 'Некомальчик недостаточно доверяет тебе'
 			answer_callback_query(bot,call,txt)
 			return
-		if arena_kd2 > 0:
-			txt = 'Некодевочка не готова'
-			if gender2 == 1:
-				txt = 'Некомальчик не готов'
-			answer_callback_query(bot,call,txt)
-			return
 		if c2 < cost:
 			answer_callback_query(bot,call,'А деньги где')
 			return
@@ -177,8 +213,8 @@ def callback_process(call,bot):
 		hp2 = maxhp2
 		equipped1 = minus_durability(equipped1)
 		equipped2 = minus_durability(equipped2)
-		cursor.execute(f"UPDATE neko SET arena_kd = {int(time.time() + BATTLE_TIMEOUT)},equipped  = {equipped1}, inventory = '{pack(inv1)}' WHERE id = {one}")
-		cursor.execute(f"UPDATE neko SET arena_kd = {int(time.time() + BATTLE_TIMEOUT)},equipped  = {equipped2}, inventory = '{pack(inv2)}' WHERE id = {call.from_user.id}")
+		cursor.execute(f"UPDATE neko SET equipped  = {equipped1}, inventory = '{pack(inv1)}' WHERE id = {one}")
+		cursor.execute(f"UPDATE neko SET equipped  = {equipped2}, inventory = '{pack(inv2)}' WHERE id = {call.from_user.id}")
 
 		field1 = generate_field(skills1)
 		field2 = generate_field(skills2)
@@ -1609,7 +1645,7 @@ def callback_process(call,bot):
 				b = int(time.time() + biba)
 				biba = math.ceil(biba/3600)
 				cursor.execute(f'UPDATE neko SET bolnitsa  = '+str(b)+' WHERE id = ' + str(idk))
-				txt += '\n\nК сожалению, непрошедшие проверку некочаны сговорились и отпиздили тебя после работы, благодаря чему ' + str(biba) + ' часов ты проведёшь в больнице 💊'
+				txt += '\n\nК сожалению, непрошедшие проверку работники сговорились и отпиздили тебя после работы, благодаря чему ' + str(biba) + ' часов ты проведёшь в больнице 💊'
 			bot.edit_message_media(media=telebot.types.InputMedia(media=phot,caption=txt,type="photo", parse_mode='HTML'),chat_id=call.message.chat.id, message_id=call.message.message_id)
 			if version != patch_version:
 				cursor.execute(f"UPDATE neko SET version = "+ str(patch_version) +" WHERE id = "+str(idk))

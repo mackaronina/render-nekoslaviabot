@@ -177,6 +177,15 @@ def poker_init_keyboard(idk):
 	keyboard.add(callback_button1,callback_button2)
 	keyboard.add(callback_button3)
 	return keyboard
+
+def arena_init_keyboard(idk):
+	keyboard = types.InlineKeyboardMarkup(row_width=2)
+	callback_button1 = types.InlineKeyboardButton(text = '➕',callback_data = f'aplus {idk}')
+	callback_button2 = types.InlineKeyboardButton(text = '➖',callback_data = f'aminus {idk}')
+	callback_button3 = types.InlineKeyboardButton(text = 'Продолжить ✔️',callback_data = f'acontinue {idk}')
+	keyboard.add(callback_button1,callback_button2)
+	keyboard.add(callback_button3)
+	return keyboard
 	
 def date_string(cur):
 	dy = cur.day
@@ -555,7 +564,7 @@ def add_to_dead(cursor,nam,reason):
 	if nam == 'Некодевочка' or nam == 'Некомальчик':
 		cursor.execute(f"INSERT INTO dead (name,time,reason) VALUES ('Безымянная могила', {int(time.time())}, '{reason}')")
 	else:
-		cursor.execute(f"INSERT INTO dead (name,time,reason) VALUES (?, {int(time.time())}, '{reason}')", nam)
+		cursor.execute(f"INSERT INTO dead (name,time,reason) VALUES (%s, {int(time.time())}, '{reason}')", nam)
 
 def kill_neko(cursor,idk,gender,newphot,nam,baza,chat,reason):
 	if gender == 0:
