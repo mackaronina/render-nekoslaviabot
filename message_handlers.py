@@ -159,8 +159,9 @@ def msg_text(message,bot):
 			switch_button1 = types.InlineKeyboardButton(text='Покормить 🐟', switch_inline_query_current_chat = "Покормить")
 			switch_button2 = types.InlineKeyboardButton(text='Выгулять 🚶‍♀️', switch_inline_query_current_chat = "Выгулять")
 			switch_button3 = types.InlineKeyboardButton(text='Погладить 🖐', switch_inline_query_current_chat = "Погладить")
+			switch_button4 = types.InlineKeyboardButton(text='Инвентарь 🎒', switch_inline_query_current_chat = "Вещи")
 			markup.add(switch_button1,switch_button2)
-			markup.add(switch_button3) 
+			markup.add(switch_button3,switch_button4) 
 			smiles = ['🥰','😊','😐','😠','🤬']
 			text = 'Что ж, это твоя личная некодевочка, чем не повод для гордости?\n\n'
 			if gender == 1:
