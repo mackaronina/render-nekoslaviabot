@@ -36,13 +36,13 @@ class ExHandler(telebot.ExceptionHandler):
 		sio.seek(0)
 		bot.send_document(ME_CHATID, sio)
 		return True
-bot = telebot.TeleBot(TOKEN, threaded=True, num_threads=2, parse_mode='HTML', exception_handler=ExHandler())
+bot = telebot.TeleBot(TOKEN, threaded=False, num_threads=2, parse_mode='HTML', exception_handler=ExHandler())
 
 cursor = create_engine(f'mysql+pymysql://{USERNAME}:{PASSWORD}@eu-central.connect.psdb.cloud:3306/nekodb', pool_recycle=280, connect_args={'ssl': {'ssl-mode': 'preferred'}})
 
 app = Flask(__name__)
 bot.remove_webhook()
-bot.set_webhook(url=APP_URL)
+bot.set_webhook(url=APP_URL, max_connections=10)
 
 random.seed()
 
@@ -99,4 +99,4 @@ def bot_start():
 schedule.every(60).seconds.do(jobupd,bot)
 Thread(target=bot_start).start()
 Thread(target=updater).start()
-app.run(host='0.0.0.0', port=80, threaded = True)
+app.run(host='0.0.0.0', port=80, threaded=True)

@@ -44,7 +44,7 @@ def msg_text(message,bot):
 			if cmd == 'неко':
 				p = random.choice(photos)
 				kormit = int(time.time())
-				gulat = int(time.time() + GULAT_TIMEOUT)
+				gulat = 0
 				licension = 0
 				happy = int(time.time())
 				cursor.execute(f"INSERT INTO neko (id,name,gulat,kormit,photo,licension,happy,photo_licension) VALUES ({message.from_user.id},'Некодевочка',{gulat},{kormit},'{p}',{licension}, {happy}, NULL)")
@@ -400,6 +400,8 @@ def msg_text(message,bot):
 				d = random.randint(1,7)
 				if inventory['carton'] > 0:
 					d = random.randint(1,8)
+				if intro_level < 2:
+					d = random.choice([1,2,4,5,6])
 				gulat = int(time.time() + GULAT_TIMEOUT + HAPPY_TIMEOUT[get_happiness_level(happy,baza)])
 				active_event = 0
 				if d == 1:
