@@ -42,11 +42,15 @@ def jobupd(bot):
 					txt = nam + ' уже не ела четыре дня! <a href="tg://user?id='+str(idk)+'">'+str(chel)+'</a>, ты охуел?'
 					if gender == 1:
 						txt = nam + ' уже не ел четыре дня! <a href="tg://user?id='+str(idk)+'">'+str(chel)+'</a>, ты охуел?'
-					bot.send_message(ch, txt)
+					markup = types.InlineKeyboardMarkup()
+					switch_button1 = types.InlineKeyboardButton(text='Покормить 🐟', switch_inline_query_current_chat = "Покормить")
+					markup.add(switch_button1)
+					bot.send_message(ch, txt, reply_markup=markup)
 					bot.send_sticker(ch, 'CAACAgIAAxkBAAEFNvlixtyYbnUoOviqOfiUaIH6jdlPhAACuxMAAsmQWEhravemy77rYSkE')
 				except:
 					pass
 				cursor.execute(f"UPDATE neko SET notifed = TRUE WHERE id = " + str(idk))
+				time.sleep(2)
 			elif kormit < -5*24*3600:
 				try:
 					txt = nam + ' умерла от голода... <a href="tg://user?id='+str(idk)+'">'+str(chel)+'</a>, её смерть на твоей совести, и ты теперь изгнан из Некославии'
@@ -58,6 +62,7 @@ def jobupd(bot):
 					pass
 				add_to_dead(cursor,nam, 'Смерть от голода')
 				cursor.execute(f"DELETE FROM neko WHERE id = "+str(idk))
+				time.sleep(2)
 		for key in list(db.keys()):
 			struct = unpack(db[key])
 			wait = struct['wait']
@@ -90,6 +95,7 @@ def jobupd(bot):
 							bot.edit_message_caption(chat_id=ch, message_id=msg, caption='Вы заебали уже играть, в следующий раз надо быстрее')
 					elif gametype == 'papers':
 						bot.edit_message_caption(chat_id=ch, message_id=msg, caption='Рабочий день закончился, в следующий раз будь быстрее')
+					time.sleep(2)
 				except:
 					pass
 				del db[key]
