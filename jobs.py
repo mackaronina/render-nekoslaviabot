@@ -31,6 +31,7 @@ def jobupd(bot):
 		data = data.fetchall()
 		for dat in data:
 			nam = dat[0]
+			cnam = nam[0].upper() + nam[1:]
 			idk = dat[1]
 			ch = dat[2]
 			chel = dat[3]
@@ -39,9 +40,9 @@ def jobupd(bot):
 			gender = dat[6]
 			if kormit < -4*24*3600 and not notifed:
 				try:
-					txt = nam + ' уже не ела четыре дня! <a href="tg://user?id='+str(idk)+'">'+str(chel)+'</a>, ты охуел?'
+					txt = cnam + ' уже не ела четыре дня! <a href="tg://user?id='+str(idk)+'">'+str(chel)+'</a>, ты охуел?'
 					if gender == 1:
-						txt = nam + ' уже не ел четыре дня! <a href="tg://user?id='+str(idk)+'">'+str(chel)+'</a>, ты охуел?'
+						txt = cnam + ' уже не ел четыре дня! <a href="tg://user?id='+str(idk)+'">'+str(chel)+'</a>, ты охуел?'
 					markup = types.InlineKeyboardMarkup()
 					switch_button1 = types.InlineKeyboardButton(text='Покормить 🐟', switch_inline_query_current_chat = "Покормить")
 					markup.add(switch_button1)
@@ -53,9 +54,9 @@ def jobupd(bot):
 				time.sleep(2)
 			elif kormit < -5*24*3600:
 				try:
-					txt = nam + ' умерла от голода... <a href="tg://user?id='+str(idk)+'">'+str(chel)+'</a>, её смерть на твоей совести, и ты теперь изгнан из Некославии'
+					txt = cnam + ' умерла от голода... <a href="tg://user?id='+str(idk)+'">'+str(chel)+'</a>, её смерть на твоей совести, и ты теперь изгнан из Некославии'
 					if gender == 1:
-						txt = nam + ' умер от голода... <a href="tg://user?id='+str(idk)+'">'+str(chel)+'</a>, его смерть на твоей совести, и ты теперь изгнан из Некославии'
+						txt = cnam + ' умер от голода... <a href="tg://user?id='+str(idk)+'">'+str(chel)+'</a>, его смерть на твоей совести, и ты теперь изгнан из Некославии'
 					bot.send_message(ch, txt)
 					bot.send_sticker(ch, 'CAACAgIAAxkBAAEFNNFixbh5x7lPtkqzBN2g8YO9FAMCLgACjxEAAqg6WEjqQFCw4uPiwikE')
 				except:

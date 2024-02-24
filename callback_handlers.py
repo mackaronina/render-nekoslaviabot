@@ -1308,7 +1308,7 @@ def callback_process(call,bot):
 		keyboard.add(callback_button1)
 		keyboard.add(callback_button2,callback_button3)
 		time.sleep(1)
-		bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id,text = f'Идёт набор в тиму для легендарной пизделки с боссом\n\nВход 1 ⚡️, 120 💞\n<b>Игроков: {len(players)}</b>',reply_markup=keyboard)
+		bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id,text = f'Идёт набор в тиму для легендарной пизделки с боссом\n\nВход 1 ⚡️, {REP_BOSS} 💞\n<b>Игроков: {len(players)}</b>',reply_markup=keyboard)
 	elif cmd == "bstart":
 		struct = unpack(db[key])
 		players = struct['players']
